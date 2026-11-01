@@ -1,8 +1,9 @@
 # RTL 学习路线图（Verilator / iverilog 仿真友好）
 **学习者：** Wei（中文）  
 **已有阶梯：** tinyriscv → picorv32 → FemtoRV/`learn-fpga` → darkriscv → SERV  
-**产出性质：** 仅 PLAN（本文件）；不 fork、不改仓库、不跑仿真  
-**研究日：** 2026-11-02（Asia/Shanghai）  
+**执行状态（2026-11-02 Asia/Shanghai）：** P1–P5 **DONE**（本地仿真绿 + 已 push 至本仓）；RISC-V fork 下一步 = **picorv32**（进行中），随后 FemtoRV/`learn-fpga` → darkriscv → SERV。  
+**产出性质：** PLAN + 已落地练习树（`p1`–`p5`）；后续 unpaid 工作仍按 PLAN 节奏推进，不强制一次开多个大核。  
+**研究日 / 修订：** 2026-11-02（Asia/Shanghai）— 增补执行状态、练习队列 N1–N7、§7 r/FPGA 中高级补强  
 **仿真工具偏好：** Verilator（大设计 / C++ cosim）+ iverilog（小 DUT / 快速自检）+ GTKWave
 
 ---
@@ -304,6 +305,20 @@ Track C:            I5 ==== I6 == I7 ========= A4 ===
 
 **执行顺序理由：** P1–P2 固化仿真纪律 → P3 打开 DSP 黄金模型习惯 → P4 打开「可视化」验收 → P5 第一次碰并行执行模型；全部不依赖 Vivado。
 
+**P1–P5 状态：** 全部 **DONE**（本地 + 已 push）。下面是接着要做的练习队列。
+
+### 接着要做的练习队列
+
+| # | 项目 | 说明 | 备注 |
+|---|------|------|------|
+| **N1** | picorv32 Verilator + 教程 | fork `develop`，按仓库/社区教程跑通仿真与自检 | RISC-V 阶梯 **下一步（进行中）** |
+| **N2** | learn-fpga / FemtoRV 精读 + 仿真 | BrunoLevy `learn-fpga`：读文档、跑官方仿真路径 | N1 之后 |
+| **N3** | darkriscv | 精读 + 仿真对照 | N2 之后 |
+| **N4** | SERV | `olofk/serv` 官方测试；与 picorv32 周期数定性对照 | 阶梯末端 |
+| **N5** | **PWM** 自检 DUT | 帖工作向需求；iverilog；phase-acc **或** counter-compare；`duty`/`period` assert | **新 P6 候选** |
+| **N6** | 读 R3 选讲 + 自写小型 FFT **或** CIC 其一 | 加深 Track B；免费 NPTEL 选听即可 | 与 N1–N4 可交错 |
+| **N7** | （可选付费）R1 MathWorks；并行读 R2 架构章 | 不阻塞开源练习队列 | 有预算再开 |
+
 ---
 
 ## 4. 许可证与重依赖注意事项
@@ -352,14 +367,29 @@ Track C:            I5 ==== I6 == I7 ========= A4 ===
 
 ---
 
-## 6. 建议的近期节奏（不执行，仅计划）
+## 6. 建议的近期节奏（PLAN；P1–P5 已执行）
 
-1. **本周：** 冻结本 PLAN；盘点本机已装 `iverilog`/`verilator`/`gtkwave`。  
-2. **下周起执行 §3：** P1 → P2（不 fork 上游；本地新建练习目录即可）。  
-3. **并行阅读：** FemtoRV/`learn-fpga` 文档 + Smith DSP Guide Ch.1–5。  
-4. **Track 选择：** 若兴趣偏无线电 → 强化 Track B；偏画面 → Track C 的 P4；偏 CPU → 坚持 A 与现有 fork 对齐。  
-5. **禁止事项（本阶段）：** 不 fork、不改上游、不装 Vivado-only 依赖「为了跑一个教学 FIR」。
+1. **已完成：** P1–P5 本地仿真绿并 push；工具链 `iverilog`/`verilator`/`gtkwave` 已可用。  
+2. **接着执行：** 「接着要做的练习队列」**N1→N4**（RISC-V fork：picorv32 → FemtoRV/`learn-fpga` → darkriscv → SERV）；并行可插 **N5 PWM**（P6 候选）与 **N6** Track B 加深。  
+3. **并行阅读：** FemtoRV/`learn-fpga` 文档 + Smith DSP Guide Ch.1–5；中高级补强见 **§7**（R3 优先，R1/R2 可选）。  
+4. **Track 选择：** 若兴趣偏无线电 → 强化 Track B（N6/§7）；偏画面 → Track C 延伸；偏 CPU → 坚持 N1–N4 与现有 fork 对齐。  
+5. **边界（本阶段仍适用）：** 练习目录本地新建即可；fork 仅限计划中的 RISC-V 阶梯（从 picorv32 起）；避开 Vivado-only 依赖「为了跑一个教学 FIR」。未付费的未来项保持 PLAN 语气，按需开 N7。
 
 ---
 
-*文档结束 — PLAN ONLY — 2026-11-02 Asia/Shanghai*
+## 7. 中高级补强（来源：r/FPGA 2026-11 帖）
+
+**帖子：** [Suggest worth it courses for intermediate to advanced FPGA (DSP/PWM/AI)?](https://www.reddit.com/r/FPGA/comments/1xkw9zt/suggest_worth_it_courses_for_intermediate_to/)（OP 问 DSP / PWM / AI on FPGA 课程；整理日 2026-11）
+
+| ID | 项目 | 类型 | URL / 备注 |
+|----|------|------|------------|
+| **R1** | MathWorks *DSP for FPGAs* | 付费课 | https://www.mathworks.com/learn/training/dsp-for-fpgas.html — 帖内 DSP-on-FPGA 高频推荐 |
+| **R2** | *FPGA-based Implementation of Signal Processing Systems* 2e（Woods, McAllister, Lightbody, Ying Yi） | 书 | 帖内 PDF 镜像：https://rfsoc.mit.edu/6S965/_static/F25/textbooks/fpga_signal_processing.pdf — **优先购书/馆藏**；镜像仅作参考 |
+| **R3** | NPTEL *Mapping Signal Processing Algorithms to Architectures*（Nitin Chandrachoodan, IITM） | 免费课档案 | https://nptel.ac.in/courses/108106149 与 https://archive.nptel.ac.in/courses/108/106/108106149/ |
+| **R4** | （降优先级）印度 PG cert / 再读一个 MTech | **Wei 跳过** | 帖内共识：更吃 **项目 + 应用深度**，不必再堆证书路径 |
+
+**怎么用：** N6 优先吃 **R3** 选讲；有预算再开 **R1**，并行翻 **R2** 架构章。PWM 工作向缺口用 **N5** 自检 DUT 补，不依赖付费课。
+
+---
+
+*文档修订 — 2026-11-02 Asia/Shanghai — P1–P5 DONE；队列 N1–N7；§7 r/FPGA 补强*

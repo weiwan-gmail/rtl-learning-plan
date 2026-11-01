@@ -2,6 +2,8 @@
 
 Wei 的 Verilator / iverilog 动手练习树。路线说明见 [`RTL_Learning_Roadmap_Wei.md`](RTL_Learning_Roadmap_Wei.md)。
 
+- **进度：** P1–P5 已完成（本地绿 + 已 push）；下一步 **picorv32**，练习队列与中高级补强见路线图「接着要做的练习队列」与 **§7**。
+
 ## 阶梯
 
 | 目录 | 内容 | 跑法 |
