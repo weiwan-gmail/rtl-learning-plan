@@ -1,0 +1,7 @@
+iverilog -g2005 -Wall -Wno-timescale -o sim_cic tb_cic_decim.v cic_decim.v
+vvp sim_cic
+PASS cic_decim bit-exact n_in=384 n_out=96 N=2 R=4 M=1
+tb_cic_decim.v:160: $finish called at 4045000 (1ps)
+python3 check_cic.py
+PASS check_cic.py bit-exact model N=2 R=4 M=1 gain=16
+ALL PASS

@@ -303,10 +303,11 @@ Track C:            I5 ==== I6 == I7 ========= A4 ===
 | **P4** | VGA 色条 / Project F `square` | `vga_timing`+图案生成 | Verilator + SDL（按 Project F） | 绿 + 窗口可见正确色条/方块 **或** `hsync/vsync` 周期计数 assert 通过 | 1–3 天 | I5 |
 | **P5** | tiny-gpu matadd | tiny-gpu 顶层 | iverilog + cocotb（官方 `make test_matadd`） | 绿 + 结果存储器与期望矩阵一致（仓库自带检查） | 2–5 天 | I7 入门；需 sv2v/cocotb |
 | **P6** | PWM 发生器 | `pwm`（counter-compare） | iverilog | 绿 + `period`/`duty`/边沿 `$fatal` 自检；`PASS pwm` | 0.5–1 天 | B2；N5 落地 |
+| **P7** | CIC 抽取器 | `cic_decim`（N=2,R=4,M=1） | iverilog + Python golden | 绿 + bit-exact `$fatal`；`PASS cic_decim` | 0.5–1 天 | B5/I4；N6 落地 |
 
-**执行顺序理由：** P1–P2 固化仿真纪律 → P3 打开 DSP 黄金模型习惯 → P4 打开「可视化」验收 → P5 第一次碰并行执行模型；全部不依赖 Vivado。
+**执行顺序理由：** P1–P2 固化仿真纪律 → P3 打开 DSP 黄金模型习惯 → P4 打开「可视化」验收 → P5 第一次碰并行执行模型 → P6/P7 补 PWM 与 CIC；全部不依赖 Vivado。
 
-**P1–P6 状态：** 全部 **DONE**（本地 + 已 push；P6=`p6-pwm/` counter-compare）。下面是接着要做的练习队列。
+**P1–P7 状态：** 全部 **DONE**（本地 + 已 push；P6=`p6-pwm/`；P7=`p7-cic/` N=2/R=4/M=1 bit-exact）。下面是接着要做的练习队列。
 
 ### 接着要做的练习队列
 
@@ -317,7 +318,7 @@ Track C:            I5 ==== I6 == I7 ========= A4 ===
 | **N3** | darkriscv | 精读 + 仿真对照 | N2 之后 |
 | **N4** | SERV | `olofk/serv` 官方测试；与 picorv32 周期数定性对照 | 阶梯末端 |
 | **N5** | **PWM** 自检 DUT | 帖工作向需求；iverilog；**counter-compare**（已选）；`duty`/`period`/边沿 assert | **DONE → P6** |
-| **N6** | 读 R3 选讲 + 自写小型 FFT **或** CIC 其一 | 加深 Track B；免费 NPTEL 选听即可 | 与 N1–N4 可交错 |
+| **N6** | 读 R3 选讲 + 自写小型 FFT **或** CIC 其一 | 加深 Track B；**已选 CIC** → `p7-cic/` | **DONE → P7** |
 | **N7** | （可选付费）R1 MathWorks；并行读 R2 架构章 | 不阻塞开源练习队列 | 有预算再开 |
 
 ---
@@ -368,12 +369,12 @@ Track C:            I5 ==== I6 == I7 ========= A4 ===
 
 ---
 
-## 6. 建议的近期节奏（PLAN；P1–P6 已执行）
+## 6. 建议的近期节奏（PLAN；P1–P7 已执行）
 
-1. **已完成：** P1–P6 本地仿真绿并 push（含 N5→P6 PWM）；RISC-V 阶梯 DONE；工具链 `iverilog`/`verilator`/`gtkwave` 已可用。  
-2. **接着执行：** RISC-V 阶梯与 **N5/P6** 已完成；队列侧重 **N6** Track B 加深（及可选 N7）；N1–N4 作复习/对照即可。  
+1. **已完成：** P1–P7 本地仿真绿并 push（含 N5→P6 PWM、N6→P7 CIC）；RISC-V 阶梯 DONE；工具链 `iverilog`/`verilator`/`gtkwave` 已可用。  
+2. **接着执行：** N5/N6 已完成；队列侧重 **N1–N4** RISC-V 精读/仿真与可选 **N7**；Track B 可继续串 FIR/NCO/CIC 或读 R3。  
 3. **并行阅读：** FemtoRV/`learn-fpga` 文档 + Smith DSP Guide Ch.1–5；中高级补强见 **§7**（R3 优先，R1/R2 可选）。  
-4. **Track 选择：** 若兴趣偏无线电 → 强化 Track B（N6/§7）；偏画面 → Track C 延伸；偏 CPU → 坚持 N1–N4 与现有 fork 对齐。  
+4. **Track 选择：** 若兴趣偏无线电 → 继续 Track B（§7 / 串级 DSP）；偏画面 → Track C 延伸；偏 CPU → 坚持 N1–N4 与现有 fork 对齐。  
 5. **边界（本阶段仍适用）：** 练习目录本地新建即可；fork 仅限计划中的 RISC-V 阶梯（从 picorv32 起）；避开 Vivado-only 依赖「为了跑一个教学 FIR」。未付费的未来项保持 PLAN 语气，按需开 N7。
 
 ---
@@ -389,7 +390,7 @@ Track C:            I5 ==== I6 == I7 ========= A4 ===
 | **R3** | NPTEL *Mapping Signal Processing Algorithms to Architectures*（Nitin Chandrachoodan, IITM） | 免费课档案 | https://nptel.ac.in/courses/108106149 与 https://archive.nptel.ac.in/courses/108/106/108106149/ |
 | **R4** | （降优先级）印度 PG cert / 再读一个 MTech | **Wei 跳过** | 帖内共识：更吃 **项目 + 应用深度**，不必再堆证书路径 |
 
-**怎么用：** N6 优先吃 **R3** 选讲；有预算再开 **R1**，并行翻 **R2** 架构章。PWM 工作向缺口用 **N5** 自检 DUT 补，不依赖付费课。
+**怎么用：** N6 已落地为 **P7 CIC**；仍建议选听 **R3**；有预算再开 **R1**，并行翻 **R2** 架构章。PWM 缺口已用 **N5→P6** 自检 DUT 补。
 
 ---
 
