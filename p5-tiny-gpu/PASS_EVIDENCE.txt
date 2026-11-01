@@ -1,0 +1,54 @@
+P5 tiny-gpu matadd — PASS evidence
+path: p5-tiny-gpu (wrapper) + p5-tiny-gpu/tiny-gpu (submodule adam-maj/tiny-gpu)
+path_taken: upstream adam-maj/tiny-gpu (shallow local clone)
+command: ./run_matadd.sh  (= make test_matadd with venv+sv2v+LIBPYTHON)
+make_exit: 0
+
+=== cocotb ===
+18:     0.00ns INFO     cocotb                             Running on Icarus Verilog version 12.0 (stable)
+19:     0.00ns INFO     cocotb                             Running tests with cocotb v1.9.2 from /workspace/rtl-learning-plan/p5-tiny-gpu/.venv/lib/python3.13/site-packages/cocotb
+27:                                                         ** test.test_matadd.test_matadd   PASS     4475001.00           0.22   20796001.78  **
+29:                                                         ** TESTS=1 PASS=1 FAIL=0 SKIP=0            4475001.00           0.23   19255958.62  **
+18:     0.00ns INFO     cocotb                             Running on Icarus Verilog version 12.0 (stable)
+19:     0.00ns INFO     cocotb                             Running tests with cocotb v1.9.2 from /workspace/rtl-learning-plan/p5-tiny-gpu/.venv/lib/python3.13/site-packages/cocotb
+27:                                                         ** test.test_matadd.test_matadd   PASS     4475001.00           0.67    6633063.90  **
+29:                                                         ** TESTS=1 PASS=1 FAIL=0 SKIP=0            4475001.00           0.75    5954143.53  **
+
+=== test/logs/log_20261102065739.txt ===
+15696:Completed in 178 cycles
+
+DATA MEMORY
++----------------+
+| Addr | Data     |
++----------------+
+| 0    | 0        |
+| 1    | 1        |
+| 2    | 2        |
+| 3    | 3        |
+| 4    | 4        |
+| 5    | 5        |
+| 6    | 6        |
+| 7    | 7        |
+| 8    | 0        |
+| 9    | 1        |
+| 10   | 2        |
+| 11   | 3        |
+| 12   | 4        |
+| 13   | 5        |
+| 14   | 6        |
+| 15   | 7        |
+| 16   | 0        |
+| 17   | 2        |
+| 18   | 4        |
+| 19   | 6        |
+| 20   | 8        |
+| 21   | 10       |
+| 22   | 12       |
+| 23   | 14       |
++----------------+
+matrix_check: A+B -> C
+A [0, 1, 2, 3, 4, 5, 6, 7]
+B [0, 1, 2, 3, 4, 5, 6, 7]
+C [0, 2, 4, 6, 8, 10, 12, 14]
+expected [0, 2, 4, 6, 8, 10, 12, 14]
+MATCH True

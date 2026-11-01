@@ -1,0 +1,14 @@
+**/.venv/
+**/build/
+*.vcd
+*.vvp
+sim_*
+!sim_*.log
+!sim_*.txt
+__pycache__/
+*.pyc
+results.xml
+.DS_Store
+Thumbs.db
+*.swp
+*~
