@@ -1,9 +1,9 @@
 # RTL 学习路线图（Verilator / iverilog 仿真友好）
 **学习者：** Wei（中文）  
 **已有阶梯：** tinyriscv → picorv32 → FemtoRV/`learn-fpga` → darkriscv → SERV  
-**执行状态（2026-11-02 Asia/Shanghai）：** P1–P5 **DONE**（本地仿真绿 + 已 push 至本仓）；RISC-V fork 下一步 = **picorv32**（进行中），随后 FemtoRV/`learn-fpga` → darkriscv → SERV。  
-**产出性质：** PLAN + 已落地练习树（`p1`–`p5`）；后续 unpaid 工作仍按 PLAN 节奏推进，不强制一次开多个大核。  
-**研究日 / 修订：** 2026-11-02（Asia/Shanghai）— 增补执行状态、练习队列 N1–N7、§7 r/FPGA 中高级补强  
+**执行状态（2026-11-02 Asia/Shanghai）：** P1–P6 **DONE**（本地仿真绿 + 已 push）；**N5 PWM** 已落地为 **P6**；RISC-V 阶梯（tinyriscv→…→SERV）**DONE**。  
+**产出性质：** PLAN + 已落地练习树（`p1`–`p6`）；后续 unpaid 工作仍按 PLAN 节奏推进，不强制一次开多个大核。  
+**研究日 / 修订：** 2026-11-02（Asia/Shanghai）— P6/N5 PWM 落地；P1–P6 + RISC-V 阶梯 DONE；队列 N1–N7、§7 仍有效  
 **仿真工具偏好：** Verilator（大设计 / C++ cosim）+ iverilog（小 DUT / 快速自检）+ GTKWave
 
 ---
@@ -302,10 +302,11 @@ Track C:            I5 ==== I6 == I7 ========= A4 ===
 | **P3** | 4-tap FIR 或 NCO | `fir4` / `nco`（可自 ZipCPU 文章重写教学版） | Verilator + C/NumPy 参考 | 绿 + 输出与参考模型 RMSE/SNR 达标（或定点 bit-exact） | 2–4 天 | B5、I4 入门 |
 | **P4** | VGA 色条 / Project F `square` | `vga_timing`+图案生成 | Verilator + SDL（按 Project F） | 绿 + 窗口可见正确色条/方块 **或** `hsync/vsync` 周期计数 assert 通过 | 1–3 天 | I5 |
 | **P5** | tiny-gpu matadd | tiny-gpu 顶层 | iverilog + cocotb（官方 `make test_matadd`） | 绿 + 结果存储器与期望矩阵一致（仓库自带检查） | 2–5 天 | I7 入门；需 sv2v/cocotb |
+| **P6** | PWM 发生器 | `pwm`（counter-compare） | iverilog | 绿 + `period`/`duty`/边沿 `$fatal` 自检；`PASS pwm` | 0.5–1 天 | B2；N5 落地 |
 
 **执行顺序理由：** P1–P2 固化仿真纪律 → P3 打开 DSP 黄金模型习惯 → P4 打开「可视化」验收 → P5 第一次碰并行执行模型；全部不依赖 Vivado。
 
-**P1–P5 状态：** 全部 **DONE**（本地 + 已 push）。下面是接着要做的练习队列。
+**P1–P6 状态：** 全部 **DONE**（本地 + 已 push；P6=`p6-pwm/` counter-compare）。下面是接着要做的练习队列。
 
 ### 接着要做的练习队列
 
@@ -315,7 +316,7 @@ Track C:            I5 ==== I6 == I7 ========= A4 ===
 | **N2** | learn-fpga / FemtoRV 精读 + 仿真 | BrunoLevy `learn-fpga`：读文档、跑官方仿真路径 | N1 之后 |
 | **N3** | darkriscv | 精读 + 仿真对照 | N2 之后 |
 | **N4** | SERV | `olofk/serv` 官方测试；与 picorv32 周期数定性对照 | 阶梯末端 |
-| **N5** | **PWM** 自检 DUT | 帖工作向需求；iverilog；phase-acc **或** counter-compare；`duty`/`period` assert | **新 P6 候选** |
+| **N5** | **PWM** 自检 DUT | 帖工作向需求；iverilog；**counter-compare**（已选）；`duty`/`period`/边沿 assert | **DONE → P6** |
 | **N6** | 读 R3 选讲 + 自写小型 FFT **或** CIC 其一 | 加深 Track B；免费 NPTEL 选听即可 | 与 N1–N4 可交错 |
 | **N7** | （可选付费）R1 MathWorks；并行读 R2 架构章 | 不阻塞开源练习队列 | 有预算再开 |
 
@@ -367,10 +368,10 @@ Track C:            I5 ==== I6 == I7 ========= A4 ===
 
 ---
 
-## 6. 建议的近期节奏（PLAN；P1–P5 已执行）
+## 6. 建议的近期节奏（PLAN；P1–P6 已执行）
 
-1. **已完成：** P1–P5 本地仿真绿并 push；工具链 `iverilog`/`verilator`/`gtkwave` 已可用。  
-2. **接着执行：** 「接着要做的练习队列」**N1→N4**（RISC-V fork：picorv32 → FemtoRV/`learn-fpga` → darkriscv → SERV）；并行可插 **N5 PWM**（P6 候选）与 **N6** Track B 加深。  
+1. **已完成：** P1–P6 本地仿真绿并 push（含 N5→P6 PWM）；RISC-V 阶梯 DONE；工具链 `iverilog`/`verilator`/`gtkwave` 已可用。  
+2. **接着执行：** RISC-V 阶梯与 **N5/P6** 已完成；队列侧重 **N6** Track B 加深（及可选 N7）；N1–N4 作复习/对照即可。  
 3. **并行阅读：** FemtoRV/`learn-fpga` 文档 + Smith DSP Guide Ch.1–5；中高级补强见 **§7**（R3 优先，R1/R2 可选）。  
 4. **Track 选择：** 若兴趣偏无线电 → 强化 Track B（N6/§7）；偏画面 → Track C 延伸；偏 CPU → 坚持 N1–N4 与现有 fork 对齐。  
 5. **边界（本阶段仍适用）：** 练习目录本地新建即可；fork 仅限计划中的 RISC-V 阶梯（从 picorv32 起）；避开 Vivado-only 依赖「为了跑一个教学 FIR」。未付费的未来项保持 PLAN 语气，按需开 N7。

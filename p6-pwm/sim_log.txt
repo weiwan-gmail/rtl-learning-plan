@@ -1,0 +1,19 @@
+iverilog -g2005 -Wall -Wno-timescale -o sim_pwm tb_pwm.v pwm.v
+vvp sim_pwm
+PASS reset
+PASS p8_d4 period=8 duty_high=4 rises=2 falls=1
+PASS p16_d4 period=16 duty_high=4 rises=2 falls=1
+PASS p16_d12 period=16 duty_high=12 rises=2 falls=1
+PASS p7_d3 period=7 duty_high=3 rises=2 falls=1
+PASS p64_d17 period=64 duty_high=17 rises=2 falls=1
+PASS p5_d1 period=5 duty_high=1 rises=2 falls=1
+PASS p5_d4 period=5 duty_high=4 rises=2 falls=1
+PASS p10_d0 flat high/period=0 over 2*period rises=0 falls=0
+PASS p10_d10 flat high/period=10 over 2*period rises=0 falls=0
+PASS p8_d100 flat high/period=8 over 2*period rises=0 falls=0
+PASS p1_d0 flat high/period=0 over 2*period rises=0 falls=0
+PASS p1_d1 flat high/period=1 over 2*period rises=0 falls=0
+PASS pwm style=counter-compare cycles=203
+PASS pwm
+tb_pwm.v:212: $finish called at 2026000 (1ps)
+ALL PASS
