@@ -1,0 +1,10 @@
+make: Entering directory '/workspace/rtl-learning-plan/woods-fpga-sp/lab-div-nr'
+iverilog -g2005 -Wall -Wno-timescale -o sim_div tb_divu16.v divu16_nr.v
+vvp sim_div
+PASS divu16_restoring n=749 mismatches=0
+METRIC RMSE=0 SNR_dB=999
+tb_divu16.v:58: $finish called at 142180000 (1ps)
+python3 check_div.py
+PASS check_div.py
+ALL PASS
+make: Leaving directory '/workspace/rtl-learning-plan/woods-fpga-sp/lab-div-nr'

@@ -8,12 +8,15 @@
 | 2 | DSP Basics — IIR biquad DF-I | RTL lab | `lab-biquad/` | DONE |
 | 2 | DSP Basics — FFT | RTL lab | `lab-fft8/` | DONE |
 | 2 | DSP Basics — LMS | RTL lab | `lab-lms/` | DONE |
-| 2 | DSP Basics — RLS / SGR | PLACEHOLDER（算法重，后续） | — | NEXT |
+| 2 | DSP Basics — RLS (1-tap) | RTL lab | `lab-rls1/` | DONE |
+| 2 | DSP Basics — QR-RLS / SGR 阵列 | PLACEHOLDER（完整阵列） | `ch11-beamformer-qr/` | stub |
 | 2 | DSP Basics — CIC 相关抽取 | reuse:p7 | `../p7-cic/` | reuse |
 | 2 | DSP Basics — NCO/SDR 链 | reuse:p11 | `../p11-sdr-loop/` | reuse |
 | 3 | Arithmetic — CLA / array mult | RTL lab | `lab-arith/` | DONE |
 | 3 | Arithmetic — CORDIC rotate+vector | RTL lab | `lab-cordic/` | DONE |
-| 3 | Arithmetic — LNS/RNS/除法/开方 | PLACEHOLDER / NEXT | — | NEXT |
+| 3 | Arithmetic — restoring divider | RTL lab | `lab-div-nr/` | DONE |
+| 3 | Arithmetic — RNS(5,7)+CRT | RTL lab | `lab-rns35/` | DONE |
+| 3 | Arithmetic — LNS / 开方 | PLACEHOLDER / 可选 | — | NEXT |
 | 4 | Technology Review | 教程-only | — | DONE（导读） |
 | 5 | Current FPGA Technologies | PLACEHOLDER-vendor | `ch05-vendor-fpga/` | stub |
 | 6 | FPGA Impl — DA FIR (unsigned) | RTL lab | `lab-da-fir/` | DONE |
@@ -30,11 +33,11 @@
 | 14 | Conclusions | 教程-only | — | DONE（导读） |
 | — | FIFO formal（配套验证） | reuse:p12 | `../p12-fifo-formal/` | reuse |
 
-## 计数摘要（Batch 1+2）
+## 计数摘要（Batch 1–3）
 
 | 类别 | 数量 |
 |------|------|
-| 新 RTL lab（本目录绿灯） | **11**（Batch1:5 + Batch2:6 新目录；cordic 扩 vector） |
+| 新 RTL lab（本目录绿灯） | **14**（Batch1–3；cordic 含 vector） |
 | reuse 已有 pN | **4**（p3/p7/p11/p12） |
 | PLACEHOLDER stub 目录 | **5**（ch05/07/10/11/12） |
 | 教程-only / 导读行 | **若干**（Ch1/4/13/14 等） |

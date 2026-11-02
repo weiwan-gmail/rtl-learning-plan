@@ -58,6 +58,14 @@ cd woods-fpga-sp && make all
 | `lab-retiming-fir/` | Ch8 combo vs pipelined FIR |
 | `lab-givens2/` | Ch11 2×2 Givens 消零积木 |
 
+## Batch 3 lab
+
+| lab | 主题 |
+|-----|------|
+| `lab-rls1/` | Ch2 1-tap RLS（Q 格式，d=3x→w≈3） |
+| `lab-div-nr/` | Ch3 16÷16 restoring 除法 |
+| `lab-rns35/` | Ch3 RNS(5,7) 加/乘 + CRT |
+
 依赖：`iverilog`、`vvp`、`python3`（无需 numpy）。
 
 ## 许可与版权

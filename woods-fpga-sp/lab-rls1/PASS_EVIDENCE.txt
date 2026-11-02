@@ -1,0 +1,12 @@
+make: Entering directory '/workspace/rtl-learning-plan/woods-fpga-sp/lab-rls1'
+iverilog -g2005 -Wall -Wno-timescale -o sim_rls1 tb_rls1.v rls1.v
+vvp sim_rls1
+PASS rls1 n=20 final_w=3 w_q=821 p=1 mismatches=0
+METRIC RMSE=0 SNR_dB=999 TARGET_W=3
+tb_rls1.v:77: $finish called at 430000 (1ps)
+python3 check_rls1.py
+w_q traj [720, 821, 821, 821, 821, 821, 821, 821, 821, 821, 821, 821, 821, 821, 821, 821, 821, 821, 821, 821]
+final w_int,w_q,p 3 821 1
+PASS check_rls1.py
+ALL PASS
+make: Leaving directory '/workspace/rtl-learning-plan/woods-fpga-sp/lab-rls1'

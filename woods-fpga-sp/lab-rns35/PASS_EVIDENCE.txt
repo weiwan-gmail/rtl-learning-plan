@@ -1,0 +1,10 @@
+make: Entering directory '/workspace/rtl-learning-plan/woods-fpga-sp/lab-rns35'
+iverilog -g2005 -Wall -Wno-timescale -o sim_rns tb_rns35.v rns35.v
+vvp sim_rns
+PASS rns35 n=574 mismatches=0
+METRIC RMSE=0 SNR_dB=999 M=35
+tb_rns35.v:81: $finish called at 11510000 (1ps)
+python3 check_rns35.py
+PASS check_rns35.py
+ALL PASS
+make: Leaving directory '/workspace/rtl-learning-plan/woods-fpga-sp/lab-rns35'
