@@ -2,7 +2,7 @@
 
 Wei 的 Verilator / iverilog 动手练习树。路线说明见 [`RTL_Learning_Roadmap_Wei.md`](RTL_Learning_Roadmap_Wei.md)。
 
-- **进度：** P1–P12 已完成（本地绿 + 已 push）；**N5 PWM → P6**、**N6 CIC → P7**、**Track C I6 → P8** 三角形光栅、**I7 → P9** tiny-gpu **matmul**、**I5×I6 → P10** VGA+三角 FB、**Track B A3-lite → P11** SDR 环回（NCO→FIR→CIC）、**A5 → P12** SymbiYosys FIFO formal 已落地。RISC-V 阶梯已完成；**N7** = 免费 NPTEL 选讲清单（DONE）→ [`n7-nptel-mapping-sp/`](n7-nptel-mapping-sp/)。**R2/Woods** 书 → RTL 仿真 Batch 1–4（DONE，RTL 课轨完成）→ [`woods-fpga-sp/`](woods-fpga-sp/)（17 labs：…+sqrt/LNS/SGR；Vivado/HLS PLACEHOLDER）。其余练习队列与中高级补强见路线图「接着要做的练习队列」与 **§7**。
+- **进度：** P1–P12 已完成（本地绿 + 已 push）；**N5 PWM → P6**、**N6 CIC → P7**、**Track C I6 → P8** 三角形光栅、**I7 → P9** tiny-gpu **matmul**、**I5×I6 → P10** VGA+三角 FB、**Track B A3-lite → P11** SDR 环回（NCO→FIR→CIC）、**A5 → P12** SymbiYosys FIFO formal 已落地。RISC-V 阶梯已完成；**N7** = 免费 NPTEL 选讲清单（DONE）→ [`n7-nptel-mapping-sp/`](n7-nptel-mapping-sp/)。**R2/Woods** 书 → RTL 仿真 Batch 1–4（DONE，RTL 课轨完成）→ [`woods-fpga-sp/`](woods-fpga-sp/)（17 labs：…+sqrt/LNS/SGR；Vivado/HLS PLACEHOLDER）。**NPTEL 108105157 VLSI Signal Processing** → [`nptel-vlsi-sp/`](nptel-vlsi-sp/)（10 RTL labs + 8 周作业检查器）。其余练习队列与中高级补强见路线图「接着要做的练习队列」与 **§7**。
 
 ## 阶梯
 
@@ -21,6 +21,7 @@ Wei 的 Verilator / iverilog 动手练习树。路线说明见 [`RTL_Learning_Ro
 | `p11-sdr-loop/` | Track B：NCO→FIR→CIC 教学环回 | `cd p11-sdr-loop && make all` |
 | `p12-fifo-formal/` | A5：SymbiYosys formal（复用 P2 FIFO） | `cd p12-fifo-formal && make all` |
 | `woods-fpga-sp/` | Woods FPGA SP 书 → RTL labs（Batch 1–4，17 labs，课轨完成） | `cd woods-fpga-sp && make all` |
+| `nptel-vlsi-sp/` | NPTEL 108105157 VLSI SP（Chakraborty）→ 10 RTL labs + Week1–8 作业检查器 | `cd nptel-vlsi-sp && make all` |
 
 依赖：`iverilog`（P1–P11）、`make`、`python3`（P3/P7/P8/P11）。P5/P9 另需 `sv2v`、`python3-venv`、`cocotb<2`、`libpython`。**P12** 另需 `yosys`、`sby`（SymbiYosys）、`z3`（见 `p12-fifo-formal/README.md`）。
 
@@ -104,6 +105,14 @@ cd rtl-learning-plan/woods-fpga-sp && make all
 ```
 
 章映射 / 占位符 / 后续批次：[`woods-fpga-sp/CHAPTER_MAP.md`](woods-fpga-sp/CHAPTER_MAP.md)、[`PLACEHOLDERS.md`](woods-fpga-sp/PLACEHOLDERS.md)、[`NEXT.md`](woods-fpga-sp/NEXT.md)。PDF 仅本地 `refs/`（gitignore），课程镜像 URL 见该目录 README。
+
+## NPTEL 108105157 / VLSI SP 快速开始
+
+```bash
+cd rtl-learning-plan/nptel-vlsi-sp && make all
+```
+
+Chakraborty *VLSI Signal Processing*（L1–L39）→ 转置 FIR、IIR 重定时、DLMS、2/3-parallel FIR、折叠 biquad、比特串行 FIR、Baugh–Wooley、CSD、look-ahead IIR，外加 Week1–8 作业的 DFG/寿命检查器。映射见 [`nptel-vlsi-sp/CHAPTER_MAP.md`](nptel-vlsi-sp/CHAPTER_MAP.md)。未跑 Vivado。
 
 ## 许可
 

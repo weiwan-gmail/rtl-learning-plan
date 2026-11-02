@@ -1,7 +1,7 @@
 # RTL 学习路线图（Verilator / iverilog 仿真友好）
 **学习者：** Wei（中文）  
 **已有阶梯：** tinyriscv → picorv32 → FemtoRV/`learn-fpga` → darkriscv → SERV  
-**执行状态（2026-11-02 Asia/Shanghai）：** P1–P12 **DONE**（本地仿真/formal 绿 + 已 push）；**N5→P6**、**N6→P7**、**I6→P8** 三角光栅、**I7→P9** tiny-gpu matmul、**I5×I6→P10** VGA+三角 FB、**Track B A3-lite→P11** SDR 环回、**A5→P12** SymbiYosys FIFO formal；**N7** = 免费 NPTEL 选讲清单 **DONE**（`n7-nptel-mapping-sp/`）；**R2/Woods Batch 1–4** **DONE**（`woods-fpga-sp/`，17 labs，RTL 课轨完成）；RISC-V 阶梯 **DONE**。  
+**执行状态（2026-11-02 Asia/Shanghai）：** P1–P12 **DONE**（本地仿真/formal 绿 + 已 push）；**N5→P6**、**N6→P7**、**I6→P8** 三角光栅、**I7→P9** tiny-gpu matmul、**I5×I6→P10** VGA+三角 FB、**Track B A3-lite→P11** SDR 环回、**A5→P12** SymbiYosys FIFO formal；**N7** = 免费 NPTEL 选讲清单 **DONE**（`n7-nptel-mapping-sp/`）；**R2/Woods Batch 1–4** **DONE**（`woods-fpga-sp/`，17 labs，RTL 课轨完成）；**NPTEL 108105157 VLSI SP** **DONE**（`nptel-vlsi-sp/`，10 RTL labs + 8 周作业检查器）；RISC-V 阶梯 **DONE**。  
 **产出性质：** PLAN + 已落地练习树（`p1`–`p12`）+ N7 选讲文档；后续 unpaid 工作仍按 PLAN 节奏推进，不强制一次开多个大核。  
 **研究日 / 修订：** 2026-11-02（Asia/Shanghai）— P12 A5 SymbiYosys FIFO formal + P11 SDR 环回（NCO→FIR→CIC）+ P10 VGA+三角 FB + P9/I7 matmul + P8/I6 三角光栅 + P7/N6 CIC + N7 NPTEL 选讲清单落地；R1/R2 仍可选付费、本路径不买  
 **仿真工具偏好：** Verilator（大设计 / C++ cosim）+ iverilog（小 DUT / 快速自检）+ GTKWave
@@ -328,6 +328,7 @@ Track C:            I5 ==== I6 == I7 ========= A4 ===
 | **N5** | **PWM** 自检 DUT | 帖工作向需求；iverilog；**counter-compare**（已选）；`duty`/`period`/边沿 assert | **DONE → P6** |
 | **N6** | 读 R3 选讲 + 自写小型 FFT **或** CIC 其一 | 加深 Track B；**已选 CIC** → `p7-cic/` | **DONE → P7** |
 | **N7** | **免费** R3 NPTEL 选讲清单（108106149） | 算法→架构；**不买** R1/R2 | **DONE → `n7-nptel-mapping-sp/`** |
+| **N7b** | **免费** NPTEL 108105157 *VLSI Signal Processing*（Chakraborty） | DFG/retiming/unfold/fold/DA → iverilog labs | **DONE → `nptel-vlsi-sp/`** |
 | **N8 / I6** | 三角形光栅（Track C） | edge-function → FB；PPM + golden | **DONE → P8 `p8-tri-raster/`** |
 | **N9 / I7** | tiny-gpu SIMT 加深（matmul） | 官方 `test_matmul` 2×2；复用 P5 子模块 | **DONE → P9 `p9-tinygpu-matmul/`** |
 | **N10 / I5×I6** | VGA 扫出三角 FB | P4 timing + P8 FB；NN×10；PPM | **DONE → P10 `p10-vga-tri/`** |
@@ -401,10 +402,11 @@ Track C:            I5 ==== I6 == I7 ========= A4 ===
 | **R1** | MathWorks *DSP for FPGAs* | 付费课 | https://www.mathworks.com/learn/training/dsp-for-fpgas.html — 帖内 DSP-on-FPGA 高频推荐 |
 | **R2** | *FPGA-based Implementation of Signal Processing Systems* 2e（Woods, McAllister, Lightbody, Ying Yi） | 书 | 帖内 PDF 镜像：https://rfsoc.mit.edu/6S965/_static/F25/textbooks/fpga_signal_processing.pdf — **优先购书/馆藏**；镜像仅作参考 |
 | **R3** | NPTEL *Mapping Signal Processing Algorithms to Architectures*（Nitin Chandrachoodan, IITM） | 免费课档案 | https://nptel.ac.in/courses/108106149 · archive · [YouTube playlist](https://www.youtube.com/playlist?list=PLyqSpQzTE6M8XDxxMl4SNFiB6_U4kII8Z) · **选讲清单 → [`n7-nptel-mapping-sp/`](n7-nptel-mapping-sp/)** |
+| **R3b** | NPTEL *VLSI Signal Processing*（Mrityunjoy Chakraborty, IIT Kharagpur, 108105157） | 免费课档案 | https://nptel.ac.in/courses/108105157 · **RTL labs + 作业检查器 → [`nptel-vlsi-sp/`](nptel-vlsi-sp/)** |
 | **R4** | （降优先级）印度 PG cert / 再读一个 MTech | **Wei 跳过** | 帖内共识：更吃 **项目 + 应用深度**，不必再堆证书路径 |
 
-**怎么用：** N6→**P7 CIC**；**N7→R3 选讲清单已落地**（必看/选看/可跳，见 `n7-nptel-mapping-sp/`）。**R2/Woods** RTL 仿真 Batch 1–4 → [`woods-fpga-sp/`](woods-fpga-sp/)（17 labs；复用 P3/P7/P11/P12；Vivado/HLS PLACEHOLDER）。有预算再开 **R1**。PWM 已用 **N5→P6** 补。
+**怎么用：** N6→**P7 CIC**；**N7→R3 选讲清单已落地**（必看/选看/可跳，见 `n7-nptel-mapping-sp/`）。**R2/Woods** RTL 仿真 Batch 1–4 → [`woods-fpga-sp/`](woods-fpga-sp/)（17 labs；复用 P3/P7/P11/P12；Vivado/HLS PLACEHOLDER）。**108105157 VLSI SP** → [`nptel-vlsi-sp/`](nptel-vlsi-sp/)（10 labs + Week1–8 作业检查器）。有预算再开 **R1**。PWM 已用 **N5→P6** 补。
 
 ---
 
-*文档修订 — 2026-11-02 Asia/Shanghai — P1–P12 + N7 NPTEL + **R2/Woods Batch 1–4** `woods-fpga-sp/`（17 RTL labs + PLACEHOLDERs；课轨完成）DONE；R1 仍可选；§7 r/FPGA 补强*
+*文档修订 — 2026-11-02 Asia/Shanghai — P1–P12 + N7 NPTEL + **R2/Woods Batch 1–4** `woods-fpga-sp/` + **108105157** `nptel-vlsi-sp/` DONE；R1 仍可选；§7 r/FPGA 补强*
