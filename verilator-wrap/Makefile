@@ -8,6 +8,9 @@ WRAPS := \
   nptel-lab-lookahead-iir \
   woods-lab-retiming-fir woods-lab-lms woods-lab-da-fir \
   woods-lab-arith woods-lab-cordic woods-lab-fft8 \
+  woods-lab-iir1 woods-lab-biquad woods-lab-da-fir-signed \
+  woods-lab-rcm woods-lab-rls1 woods-lab-div-nr woods-lab-rns35 \
+  woods-lab-sqrt16 woods-lab-lns-mul woods-lab-givens2 woods-lab-sgr2 \
   p3-fir-nco p7-cic p11-sdr-loop
 
 all:

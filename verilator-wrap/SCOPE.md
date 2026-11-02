@@ -1,23 +1,24 @@
 # Woods leftovers (not wrapped)
 
-Representative Verilator wraps cover FIR/retiming, LMS, DA, arith, CORDIC, and FFT. The other `woods-fpga-sp/lab-*` trees stay iverilog-only for now.
+All **17** `woods-fpga-sp/lab-*` RTL trees now have Verilator C++ wraps (relative DUT paths, no RTL copies). They are in [`../cmake/labs.cmake`](../cmake/labs.cmake) and `verilator-wrap/Makefile`.
 
-| Lab | Why skipped |
-|-----|-------------|
-| `lab-iir1` | Same 1st-order IIR idea as `nptel-lab-iir-retime` |
-| `lab-biquad` | DF-I already compared (parallel vs fold) in `nptel-lab-biquad-fold` |
-| `lab-da-fir-signed` | Signed DA variant of wrapped `woods-lab-da-fir` |
-| `lab-rcm` | Constant-mul / shift-add, covered in spirit by `nptel-lab-csd-mul` |
-| `lab-rls1` | Adaptive; LMS wraps (`woods-lab-lms`, `nptel-lab-dlms`) represent the class |
-| `lab-div-nr` | Extra arith (restoring divide); CLA + array mul already wrapped |
-| `lab-rns35` | Extra arith (RNS); not needed for the diverse set |
-| `lab-sqrt16` | Extra arith (digit sqrt) |
-| `lab-lns-mul` | Extra arith (LNS) |
-| `lab-givens2` | QR building block; FFT/CORDIC already cover “structured DSP arith” |
-| `lab-sgr2` | Unnormalized Givens; same bucket as givens2 |
+PLACEHOLDER dirs stay stubs — not wrapable as pure RTL + self-check TB (Vivado / HLS / vendor / system-level):
 
-PLACEHOLDER dirs (`ch05-vendor-fpga`, `ch07-hls-vivado`, …) stay stubs — no Vivado.
+| Path | Why skipped |
+|------|-------------|
+| `ch05-vendor-fpga` | Vendor FPGA primitives / datasheets, not portable RTL |
+| `ch07-hls-vivado` | Vivado HLS / OpenCL / commercial HLS |
+| `ch10-model-based` | MADF / model-based synthesis toolchains |
+| `ch11-beamformer-qr` | Full QR-RLS beamformer array; building blocks are wrapped (`lab-givens2`, `lab-sgr2`, `lab-rls1`) |
+| `ch12-bigdata-softproc` | Soft-core / system-level, not a single-module sim |
 
-## CMake matrix
+See [`../woods-fpga-sp/PLACEHOLDERS.md`](../woods-fpga-sp/PLACEHOLDERS.md). No Vivado.
 
-`cmake-system/` and `cmake-conan/` verilate **every wrap in this tree** (19 PASS + `sim-fail`). The table is [`../cmake/labs.cmake`](../cmake/labs.cmake). Woods labs in the table above were never wrapped, so they are not in the CMake matrix either.
+## CMake layout (three trees)
+
+| Tree | Scope |
+|------|--------|
+| `cmake-system/` + `cmake-conan/` | Verilator **C++** wraps. Table: [`../cmake/labs.cmake`](../cmake/labs.cmake). **Not** cocotb. |
+| `cmake-cocotb/` | [`../cocotb-wrap/`](../cocotb-wrap/) only. Table: [`../cmake/cocotb_labs.cmake`](../cmake/cocotb_labs.cmake). Invokes existing Makefiles. Does **not** include `RtlLabSim.cmake`. |
+
+`cmake-system/` and `cmake-conan/` verilate **every wrap in this tree** (30 PASS + `sim-fail`).

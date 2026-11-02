@@ -32,3 +32,5 @@ PASS p3-fir-nco cocotb fir4 n=97
 
 ALL COCOTB WRAPS PASS
 ```
+
+Optional CMake (separate project): [`../cmake-cocotb/PASS_EVIDENCE.md`](../cmake-cocotb/PASS_EVIDENCE.md) — same five Makefiles via `cmake --build build-cocotb --target sim` / ctest. Soft-skip when `.venv` is missing.

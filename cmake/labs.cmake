@@ -7,8 +7,9 @@
 # Extra VERILATOR_ARGS match verilator-wrap/<WRAP>/Makefile EXTRA_VLT_FLAGS.
 # PREFIX defaults to V<TOP> (matches the wrap tb.cpp include).
 #
-# Leftovers (not in this table): Woods labs that were never wrapped —
-# see verilator-wrap/SCOPE.md. cocotb stays Make-only.
+# Woods PLACEHOLDER dirs (Vivado/HLS/vendor) are not wraps — see
+# verilator-wrap/SCOPE.md. cocotb is a separate tree: cmake-cocotb/ plus
+# cmake/cocotb_labs.cmake; this file stays Verilator-only.
 
 include_guard(GLOBAL)
 
@@ -67,7 +68,7 @@ rtl_lab_define(
     nptel-vlsi-sp/lab-lookahead-iir/iir_lookahead.v
     nptel-vlsi-sp/lab-lookahead-iir/iir_la_pipe.v)
 
-# --- Woods (6 wrapped labs) ---
+# --- Woods (all 17 RTL labs) ---
 rtl_lab_define(
   NAME sim_retiming_fir TOP wrap_retiming_fir WRAP woods-lab-retiming-fir
   SOURCES
@@ -98,6 +99,51 @@ rtl_lab_define(
   NAME sim_fft8 TOP fft8 WRAP woods-lab-fft8
   VERILATOR_ARGS -Wno-UNOPTFLAT -Wno-BLKANDNBLK
   SOURCES woods-fpga-sp/lab-fft8/fft8.v)
+
+rtl_lab_define(
+  NAME sim_iir1 TOP iir1 WRAP woods-lab-iir1
+  SOURCES woods-fpga-sp/lab-iir1/iir1.v)
+
+rtl_lab_define(
+  NAME sim_biquad TOP biquad_df1 WRAP woods-lab-biquad
+  SOURCES woods-fpga-sp/lab-biquad/biquad_df1.v)
+
+rtl_lab_define(
+  NAME sim_da_fir_signed TOP da_fir4_signed WRAP woods-lab-da-fir-signed
+  VERILATOR_ARGS -Wno-UNOPTFLAT
+  SOURCES woods-fpga-sp/lab-da-fir-signed/da_fir4_signed.v)
+
+rtl_lab_define(
+  NAME sim_rcm TOP rcm_const_mul WRAP woods-lab-rcm
+  SOURCES woods-fpga-sp/lab-rcm/rcm_const_mul.v)
+
+rtl_lab_define(
+  NAME sim_rls1 TOP rls1 WRAP woods-lab-rls1
+  SOURCES woods-fpga-sp/lab-rls1/rls1.v)
+
+rtl_lab_define(
+  NAME sim_div_nr TOP divu16_nr WRAP woods-lab-div-nr
+  SOURCES woods-fpga-sp/lab-div-nr/divu16_nr.v)
+
+rtl_lab_define(
+  NAME sim_rns35 TOP rns35 WRAP woods-lab-rns35
+  SOURCES woods-fpga-sp/lab-rns35/rns35.v)
+
+rtl_lab_define(
+  NAME sim_sqrt16 TOP sqrt16 WRAP woods-lab-sqrt16
+  SOURCES woods-fpga-sp/lab-sqrt16/sqrt16.v)
+
+rtl_lab_define(
+  NAME sim_lns_mul TOP lns_mul8 WRAP woods-lab-lns-mul
+  SOURCES woods-fpga-sp/lab-lns-mul/lns_mul8.v)
+
+rtl_lab_define(
+  NAME sim_givens2 TOP givens_apply WRAP woods-lab-givens2
+  SOURCES woods-fpga-sp/lab-givens2/givens_apply.v)
+
+rtl_lab_define(
+  NAME sim_sgr2 TOP sgr_step WRAP woods-lab-sgr2
+  SOURCES woods-fpga-sp/lab-sgr2/sgr_step.v)
 
 # --- P3 / P7 / P11 ---
 rtl_lab_define(

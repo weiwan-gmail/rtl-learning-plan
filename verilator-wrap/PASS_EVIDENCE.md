@@ -74,6 +74,50 @@ METRIC RMSE=0 SNR_dB=999
 PASS fft8 vectors=4 mismatches=0
 METRIC RMSE=0 SNR_dB=999
 
+==== verilator-wrap/woods-lab-iir1 ====
+PASS iir1 n_checked=58 mismatches=0
+METRIC RMSE=0 SNR_dB=999
+
+==== verilator-wrap/woods-lab-biquad ====
+PASS biquad_df1 n=26 mismatches=0
+METRIC RMSE=0 SNR_dB=999
+
+==== verilator-wrap/woods-lab-da-fir-signed ====
+PASS da_fir4_signed n=26 mismatches=0
+METRIC RMSE=0 SNR_dB=999
+
+==== verilator-wrap/woods-lab-rcm ====
+PASS rcm_const_mul n=36 mismatches=0
+METRIC RMSE=0 SNR_dB=999
+
+==== verilator-wrap/woods-lab-rls1 ====
+PASS rls1 n=20 final_w=3 w_q=821 p=1 mismatches=0
+METRIC RMSE=0 SNR_dB=999 TARGET_W=3
+
+==== verilator-wrap/woods-lab-div-nr ====
+PASS divu16_restoring n=749 mismatches=0
+METRIC RMSE=0 SNR_dB=999
+
+==== verilator-wrap/woods-lab-rns35 ====
+PASS rns35 n=574 mismatches=0
+METRIC RMSE=0 SNR_dB=999 M=35
+
+==== verilator-wrap/woods-lab-sqrt16 ====
+PASS sqrt16 n=92 mismatches=0
+METRIC RMSE=0 SNR_dB=999
+
+==== verilator-wrap/woods-lab-lns-mul ====
+PASS lns_mul8 n=1024 mismatches=0
+METRIC RMSE=0 SNR_dB=999 DOMAIN=1..32
+
+==== verilator-wrap/woods-lab-givens2 ====
+PASS givens_apply n=5 mismatches=0
+METRIC RMSE=0 SNR_dB=999 NULL_DEMO=1
+
+==== verilator-wrap/woods-lab-sgr2 ====
+PASS sgr_step n=9 mismatches=0
+METRIC RMSE=0 SNR_dB=999 NULL_R2=1 NO_SQRT=1
+
 ==== verilator-wrap/p3-fir-nco ====
 PASS fir4 checked=104
 PASS nco checked=128
@@ -96,13 +140,5 @@ PASS sdr_loop all cases bit-exact
 ALL VERILATOR WRAPS PASS
 ```
 
-Original iverilog trees were re-run after adding these wraps (unchanged Makefiles):
-
-```
-cd nptel-vlsi-sp && make all   → ALL NPTEL-VLSI-SP LABS+ASSIGNS PASS
-cd woods-fpga-sp && make all   → ALL WOODS LABS PASS
-cd p3-fir-nco && make all      → ALL PASS
-cd p7-cic && make all          → ALL PASS
-cd p11-sdr-loop && make all    → ALL PASS
-```
+Original iverilog trees were re-run after adding these wraps (unchanged Makefiles). Spot-check of every newly wrapped Woods lab `make all` (iir1, biquad, da-fir-signed, rcm, rls1, div-nr, rns35, sqrt16, lns-mul, givens2, sgr2) → ALL PASS. PLACEHOLDER dirs stay stubs.
 

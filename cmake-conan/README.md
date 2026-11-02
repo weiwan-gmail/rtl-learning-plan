@@ -2,7 +2,7 @@
 
 与 [protosim-apb](https://github.com/weiwan-gmail/protosim-apb) 相同的双树之二。CMakeLists 与 `cmake-system/` 共用 [`../cmake/RtlLabSim.cmake`](../cmake/RtlLabSim.cmake)；依赖通过 Conan 2 提供。
 
-Does **not** change iverilog labs, `verilator-wrap/` Make, or `cocotb-wrap/` (cocotb stays Make-only).
+Does **not** change iverilog labs or `verilator-wrap/` Make. **Does not include cocotb** — that is [`../cmake-cocotb/`](../cmake-cocotb/).
 
 ## Layout
 
@@ -16,7 +16,7 @@ Does **not** change iverilog labs, `verilator-wrap/` Make, or `cocotb-wrap/` (co
 | `profiles/windows-msvc` | VS2022 / MSVC 193 (PC2023 CMake path) |
 | `build_sim.ps1` | PC2023 helper |
 
-Targets are the same as cmake-system: all 19 `verilator-wrap/` PASS labs plus `sim-fail` (inject-and-catch). Table: [`../cmake/labs.cmake`](../cmake/labs.cmake). See [`../cmake-system/README.md`](../cmake-system/README.md).
+Targets are the same as cmake-system: all 30 `verilator-wrap/` PASS labs plus `sim-fail` (inject-and-catch). Table: [`../cmake/labs.cmake`](../cmake/labs.cmake). See [`../cmake-system/README.md`](../cmake-system/README.md).
 
 ## Linux
 
