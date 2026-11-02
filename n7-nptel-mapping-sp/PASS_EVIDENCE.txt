@@ -1,0 +1,40 @@
+N7 NPTEL 108106149 curated lecture picks — evidence / sources
+============================================================
+Date (Asia/Shanghai): 2026-11-02
+Path: n7-nptel-mapping-sp/
+Nature: READING GUIDE ONLY — not a simulation lab; no DUT / no make test.
+
+Official / free sources used
+----------------------------
+1. https://nptel.ac.in/courses/108106149
+   NPTEL course page — Mapping Signal Processing Algorithms to Architectures
+   (Prof. Nitin Chandrachoodan, IIT Madras; course id 108106149)
+
+2. https://archive.nptel.ac.in/courses/108/106/108106149/
+   Archive: week modules, video list, assignments separated from videos
+
+3. https://onlinecourses.nptel.ac.in/noc19_ee70/preview
+   NOC19-EE70 preview / course layout (12-week summary)
+
+4. https://www.youtube.com/playlist?list=PLyqSpQzTE6M8XDxxMl4SNFiB6_U4kII8Z
+   YouTube playlist (NPTEL-NOC IITM); playlistId verified in page / oEmbed
+
+5. https://www.youtube.com/watch?v=GlbJxX130iE
+   Course introduction video (channel NPTEL-NOC IITM)
+
+6. http://www.digimat.in/nptel/courses/video/108106149/108106149.html
+   Secondary mirror listing Lecture 1–103 English titles (used for pick table)
+
+Not used / explicitly avoided
+-----------------------------
+- Paid MathWorks "DSP for FPGAs" (R1) — not purchased
+- Woods et al. book paid/primary content (R2) — not purchased for this path
+- Track C raster work — not started
+- No merge of unrelated PRs
+
+Curated counts (see LECTURE_PICKS.md)
+-------------------------------------
+必看: 8
+选看: 6
+可跳: theme blocks listed (not individual lecture dump of full 103)
+

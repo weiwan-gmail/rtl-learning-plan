@@ -2,7 +2,7 @@
 
 Wei 的 Verilator / iverilog 动手练习树。路线说明见 [`RTL_Learning_Roadmap_Wei.md`](RTL_Learning_Roadmap_Wei.md)。
 
-- **进度：** P1–P7 已完成（本地绿 + 已 push）；**N5 PWM → P6**、**N6 CIC → P7** 已落地。RISC-V 阶梯已完成；练习队列其余项与中高级补强见路线图「接着要做的练习队列」与 **§7**。
+- **进度：** P1–P7 已完成（本地绿 + 已 push）；**N5 PWM → P6**、**N6 CIC → P7** 已落地。RISC-V 阶梯已完成；**N7** = 免费 NPTEL 选讲清单（DONE）→ [`n7-nptel-mapping-sp/`](n7-nptel-mapping-sp/)。其余练习队列与中高级补强见路线图「接着要做的练习队列」与 **§7**。
 
 ## 阶梯
 

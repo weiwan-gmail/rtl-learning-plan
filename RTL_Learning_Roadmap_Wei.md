@@ -1,9 +1,9 @@
 # RTL 学习路线图（Verilator / iverilog 仿真友好）
 **学习者：** Wei（中文）  
 **已有阶梯：** tinyriscv → picorv32 → FemtoRV/`learn-fpga` → darkriscv → SERV  
-**执行状态（2026-11-02 Asia/Shanghai）：** P1–P6 **DONE**（本地仿真绿 + 已 push）；**N5 PWM** 已落地为 **P6**；RISC-V 阶梯（tinyriscv→…→SERV）**DONE**。  
-**产出性质：** PLAN + 已落地练习树（`p1`–`p6`）；后续 unpaid 工作仍按 PLAN 节奏推进，不强制一次开多个大核。  
-**研究日 / 修订：** 2026-11-02（Asia/Shanghai）— P6/N5 PWM 落地；P1–P6 + RISC-V 阶梯 DONE；队列 N1–N7、§7 仍有效  
+**执行状态（2026-11-02 Asia/Shanghai）：** P1–P7 **DONE**（本地仿真绿 + 已 push）；**N5→P6**、**N6→P7**；**N7** = 免费 NPTEL 选讲清单 **DONE**（`n7-nptel-mapping-sp/`）；RISC-V 阶梯 **DONE**。  
+**产出性质：** PLAN + 已落地练习树（`p1`–`p7`）+ N7 选讲文档；后续 unpaid 工作仍按 PLAN 节奏推进，不强制一次开多个大核。  
+**研究日 / 修订：** 2026-11-02（Asia/Shanghai）— P7/N6 CIC + N7 NPTEL 选讲清单落地；R1/R2 仍可选付费、本路径不买  
 **仿真工具偏好：** Verilator（大设计 / C++ cosim）+ iverilog（小 DUT / 快速自检）+ GTKWave
 
 ---
@@ -319,7 +319,7 @@ Track C:            I5 ==== I6 == I7 ========= A4 ===
 | **N4** | SERV | `olofk/serv` 官方测试；与 picorv32 周期数定性对照 | 阶梯末端 |
 | **N5** | **PWM** 自检 DUT | 帖工作向需求；iverilog；**counter-compare**（已选）；`duty`/`period`/边沿 assert | **DONE → P6** |
 | **N6** | 读 R3 选讲 + 自写小型 FFT **或** CIC 其一 | 加深 Track B；**已选 CIC** → `p7-cic/` | **DONE → P7** |
-| **N7** | （可选付费）R1 MathWorks；并行读 R2 架构章 | 不阻塞开源练习队列 | 有预算再开 |
+| **N7** | **免费** R3 NPTEL 选讲清单（108106149） | 算法→架构；**不买** R1/R2 | **DONE → `n7-nptel-mapping-sp/`** |
 
 ---
 
@@ -372,10 +372,10 @@ Track C:            I5 ==== I6 == I7 ========= A4 ===
 ## 6. 建议的近期节奏（PLAN；P1–P7 已执行）
 
 1. **已完成：** P1–P7 本地仿真绿并 push（含 N5→P6 PWM、N6→P7 CIC）；RISC-V 阶梯 DONE；工具链 `iverilog`/`verilator`/`gtkwave` 已可用。  
-2. **接着执行：** N5/N6 已完成；队列侧重 **N1–N4** RISC-V 精读/仿真与可选 **N7**；Track B 可继续串 FIR/NCO/CIC 或读 R3。  
-3. **并行阅读：** FemtoRV/`learn-fpga` 文档 + Smith DSP Guide Ch.1–5；中高级补强见 **§7**（R3 优先，R1/R2 可选）。  
+2. **接着执行：** N5/N6/N7 已完成；队列侧重 **N1–N4** RISC-V 精读/仿真；Track B 可按 `n7-nptel-mapping-sp/LECTURE_PICKS.md` 选听后改写 P3/P7 架构。  
+3. **并行阅读：** FemtoRV/`learn-fpga` 文档 + Smith DSP Guide Ch.1–5；中高级补强见 **§7**（**R3/N7 已出选讲清单**；R1/R2 仅有预算再开）。  
 4. **Track 选择：** 若兴趣偏无线电 → 继续 Track B（§7 / 串级 DSP）；偏画面 → Track C 延伸；偏 CPU → 坚持 N1–N4 与现有 fork 对齐。  
-5. **边界（本阶段仍适用）：** 练习目录本地新建即可；fork 仅限计划中的 RISC-V 阶梯（从 picorv32 起）；避开 Vivado-only 依赖「为了跑一个教学 FIR」。未付费的未来项保持 PLAN 语气，按需开 N7。
+5. **边界（本阶段仍适用）：** 练习目录本地新建即可；fork 仅限计划中的 RISC-V 阶梯（从 picorv32 起）；避开 Vivado-only 依赖「为了跑一个教学 FIR」。R1/R2 仍为可选付费；**N7 已用免费 R3 选讲闭环**，不强制购买。
 
 ---
 
@@ -387,11 +387,11 @@ Track C:            I5 ==== I6 == I7 ========= A4 ===
 |----|------|------|------------|
 | **R1** | MathWorks *DSP for FPGAs* | 付费课 | https://www.mathworks.com/learn/training/dsp-for-fpgas.html — 帖内 DSP-on-FPGA 高频推荐 |
 | **R2** | *FPGA-based Implementation of Signal Processing Systems* 2e（Woods, McAllister, Lightbody, Ying Yi） | 书 | 帖内 PDF 镜像：https://rfsoc.mit.edu/6S965/_static/F25/textbooks/fpga_signal_processing.pdf — **优先购书/馆藏**；镜像仅作参考 |
-| **R3** | NPTEL *Mapping Signal Processing Algorithms to Architectures*（Nitin Chandrachoodan, IITM） | 免费课档案 | https://nptel.ac.in/courses/108106149 与 https://archive.nptel.ac.in/courses/108/106/108106149/ |
+| **R3** | NPTEL *Mapping Signal Processing Algorithms to Architectures*（Nitin Chandrachoodan, IITM） | 免费课档案 | https://nptel.ac.in/courses/108106149 · archive · [YouTube playlist](https://www.youtube.com/playlist?list=PLyqSpQzTE6M8XDxxMl4SNFiB6_U4kII8Z) · **选讲清单 → [`n7-nptel-mapping-sp/`](n7-nptel-mapping-sp/)** |
 | **R4** | （降优先级）印度 PG cert / 再读一个 MTech | **Wei 跳过** | 帖内共识：更吃 **项目 + 应用深度**，不必再堆证书路径 |
 
-**怎么用：** N6 已落地为 **P7 CIC**；仍建议选听 **R3**；有预算再开 **R1**，并行翻 **R2** 架构章。PWM 缺口已用 **N5→P6** 自检 DUT 补。
+**怎么用：** N6→**P7 CIC**；**N7→R3 选讲清单已落地**（必看/选看/可跳，见 `n7-nptel-mapping-sp/`）。**不买** MathWorks/Woods 亦可推进；有预算再开 **R1**，馆藏/正版再翻 **R2**。PWM 已用 **N5→P6** 补。
 
 ---
 
-*文档修订 — 2026-11-02 Asia/Shanghai — P1–P5 DONE；队列 N1–N7；§7 r/FPGA 补强*
+*文档修订 — 2026-11-02 Asia/Shanghai — P1–P7 + N7 NPTEL 选讲 DONE；R1/R2 仍可选；§7 r/FPGA 补强*
