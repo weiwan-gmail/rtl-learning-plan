@@ -24,6 +24,8 @@ Wei 的 Verilator / iverilog 动手练习树。路线说明见 [`RTL_Learning_Ro
 | `nptel-vlsi-sp/` | NPTEL 108105157 VLSI SP（Chakraborty）→ 10 RTL labs + Week1–8 作业检查器 | `cd nptel-vlsi-sp && make all` |
 | `verilator-wrap/` | **Optional** Verilator C++ TBs (separate trees; original `make` unchanged) | `cd verilator-wrap && make all` |
 | `cocotb-wrap/` | **Optional** cocotb+Verilator (LMS/CORDIC/DA/FIR random goldens only) | `cd cocotb-wrap && make venv && make all` |
+| `cmake-system/` | **Optional** CMake + 系统 Verilator（无 Conan；代表矩阵 sim / sim-fail） | `cmake -S cmake-system -B build-system && cmake --build build-system --target sim` |
+| `cmake-conan/` | **Optional** CMake + Conan 2 本地 Verilator recipe（withlimon / 系统 kit） | 见 [`cmake-conan/README.md`](cmake-conan/README.md) |
 
 依赖：`iverilog`（P1–P11）、`make`、`python3`（P3/P7/P8/P11）。P5/P9 另需 `sv2v`、`python3-venv`、`cocotb<2`、`libpython`。**P12** 另需 `yosys`、`sby`（SymbiYosys）、`z3`（见 `p12-fifo-formal/README.md`）。
 
@@ -124,6 +126,19 @@ Separate trees — they do **not** change `cd <lab> && make` / `nptel-vlsi-sp` /
 - [`cocotb-wrap/`](cocotb-wrap/) — extra randomized Python goldens (LMS, DLMS, CORDIC, DA FIR, P3 FIR). PASS: `cd cocotb-wrap && make venv && make all`.
 
 Windows (PC2023) uses the [withlimon/verilator-windows](https://github.com/withlimon/verilator-windows) build/layout (not a random unofficial drop) and **`verilator_bin.exe`** — not the extensionless Perl `verilator` (Explorer/CMD “Open with…”). See [`verilator-wrap/WINDOWS.md`](verilator-wrap/WINDOWS.md). Linux/mac: ordinary `verilator`.
+
+## Optional CMake dual-tree（Make 路径不动）
+
+与 [protosim-apb](https://github.com/weiwan-gmail/protosim-apb) 相同的 `cmake-system/` + `cmake-conan/` 布局；共用 [`cmake/RtlLabSim.cmake`](cmake/RtlLabSim.cmake) / [`cmake/PreferUnixGcc.cmake`](cmake/PreferUnixGcc.cmake)。编的是 **verilator-wrap 代表矩阵**（≥1 NPTEL、≥1 Woods、P3+P7），DUT 仍走原 lab 相对路径。`sim-fail` 为 inject-and-catch（故意写错 CSD golden，runner 只有抓到 `FAIL` 才算过）。**cocotb 仍仅 Make。**
+
+```bash
+# 系统 Verilator（Linux VM 已证明）
+cmake -S cmake-system -B build-system -DCMAKE_BUILD_TYPE=Release
+cmake --build build-system --target sim
+cmake --build build-system --target sim-fail
+```
+
+Windows PC2023（worker `D:\CursorWorker`，Conan 2.34 + withlimon `verilator_bin.exe`）：[`cmake-system/WINDOWS.md`](cmake-system/WINDOWS.md) 与 `cmake-system/build_sim.ps1` / `cmake-conan/build_sim.ps1`。
 
 ## 许可
 

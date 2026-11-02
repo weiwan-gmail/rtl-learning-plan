@@ -1,5 +1,8 @@
 **/.venv/
 **/build/
+/build-system/
+/build-conan/
+CMakeUserPresets.json
 **/obj_dir/
 **/sim_build/
 *.fst
