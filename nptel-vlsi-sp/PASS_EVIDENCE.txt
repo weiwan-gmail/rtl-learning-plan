@@ -1,0 +1,209 @@
+NPTEL 108105157 VLSI Signal Processing — make all evidence
+Date: 2026-11-02
+Command: cd nptel-vlsi-sp && make all
+Toolchain: iverilog 12 + vvp + python3 (stdlib). No Vivado/HLS.
+Result: ALL NPTEL-VLSI-SP LABS+ASSIGNS PASS (exit 0)
+
+==== lab-fir-transpose ====
+make[1]: Entering directory '/workspace/nptel-vlsi-sp/lab-fir-transpose'
+iverilog -g2005 -Wall -Wno-timescale -o sim_ft tb_fir_transpose.v fir_direct.v fir_transpose.v
+vvp sim_ft
+PASS fir-transpose direct+transposed n=24 mismatches=0
+METRIC SAME_BITEXACT=1 LINEAR_PHASE_H=1,2,2,1
+tb_fir_transpose.v:61: $finish called at 545000 (1ps)
+python3 check_fir_transpose.py
+PASS check_fir_transpose.py
+ALL PASS
+make[1]: Leaving directory '/workspace/nptel-vlsi-sp/lab-fir-transpose'
+==== lab-iir-retime ====
+make[1]: Entering directory '/workspace/nptel-vlsi-sp/lab-iir-retime'
+iverilog -g2005 -Wall -Wno-timescale -o sim_iir tb_iir_retime.v iir1_combo.v iir1_pipe.v
+vvp sim_iir
+PASS iir-retime combo+pipe n=17 mismatches=0
+METRIC LATENCY_COMBO=1 LATENCY_PIPE=2 SAME_BITEXACT=1
+tb_iir_retime.v:73: $finish called at 945000 (1ps)
+python3 check_iir_retime.py
+PASS check_iir_retime.py n=17
+ALL PASS
+make[1]: Leaving directory '/workspace/nptel-vlsi-sp/lab-iir-retime'
+==== lab-dlms ====
+make[1]: Entering directory '/workspace/nptel-vlsi-sp/lab-dlms'
+iverilog -g2005 -Wall -Wno-timescale -o sim_dlms tb_dlms.v lms2.v dlms2.v
+vvp sim_dlms
+INFO LMS  w0=3
+INFO DLMS w0=3
+PASS dlms LMS+DLMS plant d=3x  LMS_w0=3 DLMS_w0=3
+METRIC DLMS_D=1 MUSHIFT=6 SAME_PLANT=1
+tb_dlms.v:50: $finish called at 4075000 (1ps)
+python3 check_dlms.py
+PASS check_dlms.py LMS_w0=3 DLMS_w0=3
+ALL PASS
+make[1]: Leaving directory '/workspace/nptel-vlsi-sp/lab-dlms'
+==== lab-fir-2par ====
+make[1]: Entering directory '/workspace/nptel-vlsi-sp/lab-fir-2par'
+iverilog -g2005 -Wall -Wno-timescale -o sim_2p tb_fir_2par.v fir_serial.v fir_2par.v
+vvp sim_2p
+PASS fir-2par serial vs even/odd polyphase bit-exact n_serial=32
+METRIC PARALLEL=2 SAME_BITEXACT=1
+tb_fir_2par.v:63: $finish called at 1010000 (1ps)
+python3 check_fir_2par.py
+PASS check_fir_2par.py
+ALL PASS
+make[1]: Leaving directory '/workspace/nptel-vlsi-sp/lab-fir-2par'
+==== lab-fir-3par ====
+make[1]: Entering directory '/workspace/nptel-vlsi-sp/lab-fir-3par'
+iverilog -g2005 -Wall -Wno-timescale -o sim_3p tb_fir_3par.v fir_serial3.v fir_3par.v
+vvp sim_3p
+PASS fir-3par vs serial golden n=30 mismatches=0
+METRIC PARALLEL=3 SAME_BITEXACT=1
+tb_fir_3par.v:42: $finish called at 230000 (1ps)
+python3 check_fir_3par.py
+PASS check_fir_3par.py
+ALL PASS
+make[1]: Leaving directory '/workspace/nptel-vlsi-sp/lab-fir-3par'
+==== lab-biquad-fold ====
+make[1]: Entering directory '/workspace/nptel-vlsi-sp/lab-biquad-fold'
+iverilog -g2005 -Wall -Wno-timescale -o sim_bq tb_biquad_fold.v biquad_par.v biquad_fold.v
+vvp sim_bq
+PASS biquad-fold parallel vs N=5 folded n=13
+METRIC FOLDING_FACTOR=5 SAME_BITEXACT=1
+tb_biquad_fold.v:70: $finish called at 816000 (1ps)
+python3 check_biquad_fold.py
+PASS check_biquad_fold.py
+ALL PASS
+make[1]: Leaving directory '/workspace/nptel-vlsi-sp/lab-biquad-fold'
+==== lab-bitserial-fir ====
+make[1]: Entering directory '/workspace/nptel-vlsi-sp/lab-bitserial-fir'
+iverilog -g2005 -Wall -Wno-timescale -o sim_bs tb_bitserial_fir.v bitserial_fir.v
+vvp sim_bs
+PASS bitserial-fir y=-3x+3x_d n=12 ybit_delay=2
+METRIC LSB_LATENCY=3 W=8
+tb_bitserial_fir.v:67: $finish called at 1155000 (1ps)
+python3 check_bitserial.py
+PASS check_bitserial.py
+ALL PASS
+make[1]: Leaving directory '/workspace/nptel-vlsi-sp/lab-bitserial-fir'
+==== lab-baugh-wooley ====
+make[1]: Entering directory '/workspace/nptel-vlsi-sp/lab-baugh-wooley'
+iverilog -g2005 -Wall -Wno-timescale -o sim_bw tb_baugh_wooley.v baugh_wooley8.v
+vvp sim_bw
+PASS baugh-wooley8 n=327 mismatches=0
+METRIC SIGNED_ARRAY=1
+tb_baugh_wooley.v:48: $finish called at 6570000 (1ps)
+python3 check_bw.py
+PASS check_bw.py n=13312
+ALL PASS
+make[1]: Leaving directory '/workspace/nptel-vlsi-sp/lab-baugh-wooley'
+==== lab-csd-mul ====
+make[1]: Entering directory '/workspace/nptel-vlsi-sp/lab-csd-mul'
+iverilog -g2005 -Wall -Wno-timescale -o sim_csd tb_csd_mul.v csd_mul.v
+vvp sim_csd
+PASS csd-mul *29 and *-19 n=84
+METRIC CSD_29=100T01 CSD_M19=T0T01
+tb_csd_mul.v:41: $finish called at 1710000 (1ps)
+python3 check_csd.py
+PASS check_csd.py
+ALL PASS
+make[1]: Leaving directory '/workspace/nptel-vlsi-sp/lab-csd-mul'
+==== lab-lookahead-iir ====
+make[1]: Entering directory '/workspace/nptel-vlsi-sp/lab-lookahead-iir'
+iverilog -g2005 -Wall -Wno-timescale -o sim_la tb_lookahead.v iir_plain.v iir_lookahead.v iir_la_pipe.v
+vvp sim_la
+PASS lookahead-iir clustered 2-step vs integrator n=16
+METRIC LOOKAHEAD=clustered LATENCY_PIPE=2 SAME_BITEXACT=1
+tb_lookahead.v:86: $finish called at 376000 (1ps)
+python3 check_lookahead.py
+PASS check_lookahead.py
+ALL PASS
+make[1]: Leaving directory '/workspace/nptel-vlsi-sp/lab-lookahead-iir'
+==== assign-w1 ====
+make[1]: Entering directory '/workspace/nptel-vlsi-sp/assign-w1'
+python3 check.py
+PASS A1Q1 critical path unchanged when every edge delay is doubled (c)
+PASS A1Q2 matrix-mul DG dimension = 3 (b)
+PASS A1Q3 Figure-1 (transposed linear-phase) CP = 1 mul + 1 add (c)
+PASS A1Q4 transpose of Figure-1 CP = 4 add + 1 mul (a)
+PASS A1Q5 NOT true: DG is always pipelined (b)
+PASS assign-w1
+make[1]: Leaving directory '/workspace/nptel-vlsi-sp/assign-w1'
+==== assign-w2 ====
+make[1]: Entering directory '/workspace/nptel-vlsi-sp/assign-w2'
+python3 check.py
+PASS A2Q1 DG preferred when regularity matters (c)
+PASS A2Q2 min clock = 4T (d)  [delay-free B-D-F-H and A-C-E-G]
+PASS A2Q3 H depends on D intra-iteration (a)
+PASS A2Q4 A-B=3D, A-C=D ⇒ H delayed 1 cycle (b)
+PASS A2Q5 move delay across B (cutset) ⇒ H unchanged (d)
+PASS A2Q6 transposed DFG CP = 4T (d)
+PASS A2Q7 min delay on H-A is 0 (b)
+PASS A2Q8 2-D FIR DG dimension = 4 (c)
+PASS assign-w2
+make[1]: Leaving directory '/workspace/nptel-vlsi-sp/assign-w2'
+==== assign-w3 ====
+make[1]: Entering directory '/workspace/nptel-vlsi-sp/assign-w3'
+python3 check.py
+PASS A3Q1 Figure-1 CP = 30 u.t. (b)  [A(20)+B(10)]
+PASS A3Q2 r=(0,1,2,3) is invalid (c)
+PASS A3Q3 two-stage retiming CP = 25 u.t. (b)
+PASS A3Q4 S-B delay after r(B)=2 is 3 (c)
+PASS A3Q5 Figure-2 after retiming CP = 3T (b)
+PASS A3Q6 output of B delayed by 0 cycle (d)
+PASS assign-w3
+make[1]: Leaving directory '/workspace/nptel-vlsi-sp/assign-w3'
+==== assign-w4 ====
+make[1]: Entering directory '/workspace/nptel-vlsi-sp/assign-w4'
+python3 check.py
+PASS A4Q1 WDF CP = 10 u.t. (b)
+PASS A4Q2 WDF iteration bound = 2 u.t. (a)
+PASS A4Q3 Figure-2 CP = 30 u.t. (c)  [A(20)+B(10)]
+PASS A4Q4 iteration bound = 25 u.t. (b)  [B-C-D / C-D-E]
+PASS A4Q5 min CP via retiming = 25 u.t. (d)
+PASS A4Q6 incorrect statement: cutset retiming on any DFG (b)
+PASS assign-w4
+make[1]: Leaving directory '/workspace/nptel-vlsi-sp/assign-w4'
+==== assign-w5 ====
+make[1]: Entering directory '/workspace/nptel-vlsi-sp/assign-w5'
+python3 check.py
+PASS A5Q1 LMS cannot pipeline: delay-free error-feedback (c)
+PASS A5Q2 Delayed-LMS converges slower than LMS (c)
+PASS A5Q3 delay-free unfolded edges iff w < J (b)
+PASS A5Q4 # parallel loops upper-bounded by J (b)
+PASS A5Q5 J=2 unfolded CP = 60 u.t. (c)
+PASS A5Q6 after unfold+retime, min CP = 40 u.t. (c)  [IB of unfolded]
+PASS A5Q7 retimed-then-unfolded CP = 40 u.t. (c)
+PASS assign-w5
+make[1]: Leaving directory '/workspace/nptel-vlsi-sp/assign-w5'
+==== assign-w6 ====
+make[1]: Entering directory '/workspace/nptel-vlsi-sp/assign-w6'
+python3 check.py
+PASS A6Q1 bit-serial uses less hardware than word-serial (b)
+PASS A6Q2 fold N=12 then unfold J=3 → digit size 3 (c)
+PASS A6Q3 # edges with negative D_F = 6 (c)
+PASS A6Q4 D_F(M4→A3) = -3 (c)
+PASS A6Q5 incorrect inequality is (d)  r(A2)-r(M4)≤-1
+PASS A6Q6 Σ D_F around loop = N w_l - t_l (c)
+PASS assign-w6
+make[1]: Leaving directory '/workspace/nptel-vlsi-sp/assign-w6'
+==== assign-w7 ====
+make[1]: Entering directory '/workspace/nptel-vlsi-sp/assign-w7'
+python3 check.py
+PASS A7Q1 min latency = 7 (a)
+PASS A7Q2 min registers = 8 (b)
+PASS A7Q3 0-th polyphase of 10 cos(2πn/8) u(n) is 10 u(n) (a)
+PASS A7Q4 IIR polyphase component is again IIR (c)
+PASS A7Q5 CSD(29) = 100T01 (c)
+PASS A7Q6 Baugh-Wooley: no overflow in intermediate PP adds (b)
+PASS assign-w7
+make[1]: Leaving directory '/workspace/nptel-vlsi-sp/assign-w7'
+==== assign-w8 ====
+make[1]: Entering directory '/workspace/nptel-vlsi-sp/assign-w8'
+python3 check.py
+PASS A8Q1 radix-4 fractional range max = (1-2^{-2W})/3 (c)
+PASS A8Q2 carry-save vs ripple: shorter critical path (c)
+PASS A8Q3 bit-serial FIR LSB of y at Wn+3 (c)
+PASS A8Q4 DA magnitude ROM addresses = 2 (a)
+PASS A8Q5 CSD(-19) = T0T01 (b)
+PASS A8Q6 bit-serial IIR feasibility: W, coefficients, and order (d)
+PASS assign-w8
+make[1]: Leaving directory '/workspace/nptel-vlsi-sp/assign-w8'
+ALL NPTEL-VLSI-SP LABS+ASSIGNS PASS
