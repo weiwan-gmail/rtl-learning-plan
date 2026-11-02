@@ -9,7 +9,7 @@ Recorded **2026-11-02** on this Cloud Agent Linux VM (`cursor`, Ubuntu, x86_64).
 | Verilator | 5.020 (Debian 5.020-1), `verilator_bin` at `/bin/verilator_bin`, kit `/usr/share/verilator` |
 | Conan | not used in this tree |
 
-Windows PC2023 (withlimon `verilator_bin.exe`, worker `D:\CursorWorker`) is a follow-up; see [`WINDOWS.md`](WINDOWS.md).
+Windows PC2023 (withlimon `verilator_bin.exe`, worker `D:\CursorWorker`) is proven in [`WINDOWS_PASS_EVIDENCE.md`](WINDOWS_PASS_EVIDENCE.md).
 
 ## Make paths still green (spot-check; full iverilog/wrap `make all` not re-run)
 

@@ -48,6 +48,6 @@ cd cmake-conan
 .\build_sim.ps1
 ```
 
-Full copy-paste: [`../cmake-system/WINDOWS.md`](../cmake-system/WINDOWS.md). The recipe prefers `D:\verilator` if present, otherwise downloads withlimon **5.052**. Always the PE `verilator_bin.exe` — never extensionless Perl `verilator`.
+Full copy-paste: [`../cmake-system/WINDOWS.md`](../cmake-system/WINDOWS.md). The recipe prefers `D:\verilator` if present, otherwise the MSYS2 prefix / withlimon **5.052** tarball. Always the PE `verilator_bin.exe` — never extensionless Perl `verilator`. PC2023 proof: [`WINDOWS_PASS_EVIDENCE.md`](WINDOWS_PASS_EVIDENCE.md). `conan install` uses `--no-remote` so extra remotes cannot prompt for a password.
 
 MSVC: `CheckCXXCompilerFlag` before `verilate()`, then strip `-fcoroutines*`.

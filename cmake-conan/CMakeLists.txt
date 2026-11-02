@@ -27,6 +27,10 @@ endif()
 # Prefer the CMake-detected compiler (PreferUnixGcc → g++) over `conan profile detect`.
 set(CONAN_HOST_PROFILE "auto-cmake" CACHE STRING "Conan host profile")
 set(CONAN_BUILD_PROFILE "auto-cmake" CACHE STRING "Conan build profile")
+# Local verilator recipe only. Skip remotes (conancenter has no Conan 2
+# verilator; this worker's conan-local Artifactory prompts for a password).
+set(CONAN_INSTALL_ARGS "--build=missing;--no-remote" CACHE STRING
+  "Extra arguments for cmake-conan provider conan install")
 list(PREPEND CMAKE_PROJECT_TOP_LEVEL_INCLUDES
   "${CMAKE_CURRENT_LIST_DIR}/conan_provider.cmake")
 

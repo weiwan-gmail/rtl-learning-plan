@@ -12,28 +12,73 @@ include_guard(GLOBAL)
 set(RTL_LAB_CMAKE_DIR "${CMAKE_CURRENT_LIST_DIR}")
 get_filename_component(RTL_LAB_REPO_ROOT "${RTL_LAB_CMAKE_DIR}/.." ABSOLUTE)
 
+# MSYS2 names a Perl script share/verilator/bin/verilator_bin.exe. withlimon
+# and mingw64/bin ship a real PE (MZ). Only the PE may be executed on Windows.
+function(rtl_lab_windows_file_is_pe filepath outvar)
+  set(_ok FALSE)
+  if(EXISTS "${filepath}")
+    file(READ "${filepath}" _magic HEX LIMIT 2)
+    string(TOUPPER "${_magic}" _magic)
+    if(_magic STREQUAL "4D5A")
+      set(_ok TRUE)
+    endif()
+  endif()
+  set(${outvar} ${_ok} PARENT_SCOPE)
+endfunction()
+
+function(rtl_lab_find_windows_pe outvar)
+  unset(RTL_LAB_VERILATOR_BIN CACHE)
+  set(_cands "")
+  # Known PE bindirs first. $VERILATOR_ROOT/bin on MSYS2 is the Perl wrapper.
+  list(APPEND _cands
+    "D:/verilator/bin/verilator_bin.exe"
+    "C:/msys64/mingw64/bin/verilator_bin.exe")
+  if(DEFINED ENV{VERILATOR_ROOT} AND NOT "$ENV{VERILATOR_ROOT}" STREQUAL "")
+    list(APPEND _cands
+      "$ENV{VERILATOR_ROOT}/bin/verilator_bin.exe"
+      "$ENV{VERILATOR_ROOT}/../bin/verilator_bin.exe"
+      "$ENV{VERILATOR_ROOT}/../../bin/verilator_bin.exe")
+  endif()
+  foreach(_c IN LISTS _cands)
+    get_filename_component(_abs "${_c}" ABSOLUTE)
+    rtl_lab_windows_file_is_pe("${_abs}" _ispe)
+    if(_ispe)
+      set(${outvar} "${_abs}" PARENT_SCOPE)
+      return()
+    endif()
+  endforeach()
+  find_program(_rtl_path_pe NAMES verilator_bin.exe)
+  if(_rtl_path_pe)
+    rtl_lab_windows_file_is_pe("${_rtl_path_pe}" _ispe)
+    if(_ispe)
+      set(${outvar} "${_rtl_path_pe}" PARENT_SCOPE)
+      return()
+    endif()
+  endif()
+  set(${outvar} "" PARENT_SCOPE)
+endfunction()
+
 function(rtl_lab_locate_verilator_kit)
   set(_root "")
 
   if(WIN32)
-    # Always the PE engine. Never NAMES verilator (no extension).
-    # Do not pre-set the result variable — find_program skips the search if it
-    # is already defined (even as "").
-    find_program(RTL_LAB_VERILATOR_BIN NAMES verilator_bin.exe HINTS
-      "$ENV{VERILATOR_ROOT}/bin"
-      "D:/verilator/bin"
-      "C:/msys64/mingw64/bin")
-    if(NOT RTL_LAB_VERILATOR_BIN)
+    rtl_lab_find_windows_pe(_pe)
+    if(NOT _pe)
       message(FATAL_ERROR
-        "Windows Verilator PE not found (verilator_bin.exe).\n"
+        "Windows Verilator PE not found (verilator_bin.exe with MZ header).\n"
         "Install the withlimon build: https://github.com/withlimon/verilator-windows\n"
         "Extract to a short path (e.g. D:\\verilator), then:\n"
         "  VERILATOR_ROOT = D:\\verilator\n"
         "  PATH          += D:\\verilator\\bin\n"
         "Do NOT invoke the extensionless Perl `verilator` (Open-with trap).\n"
+        "Do NOT invoke share/verilator/bin/verilator_bin.exe (Perl wrapper with a .exe suffix).\n"
         "PC2023 worker workspace: D:\\CursorWorker")
     endif()
+    set(RTL_LAB_VERILATOR_BIN "${_pe}")
   else()
+    # Do not pre-set the result variable — find_program skips the search if it
+    # is already defined (even as "").
+    unset(RTL_LAB_VERILATOR_BIN CACHE)
     find_program(RTL_LAB_VERILATOR_BIN NAMES verilator_bin HINTS
       "$ENV{VERILATOR_ROOT}/bin"
       /usr/bin
@@ -74,16 +119,20 @@ endfunction()
 
 function(rtl_lab_find_verilator)
   # Pre-seed VERILATOR_BIN so a Debian/Ubuntu verilator-config.cmake does not
-  # FATAL (it searches only VERILATOR_ROOT/bin with NO_CMAKE_SYSTEM_PATH).
+  # FATAL (it searches only VERILATOR_ROOT/bin with NO_CMAKE_SYSTEM_PATH), and
+  # so an MSYS2 kit config does not pick share/verilator/bin's Perl wrapper.
   if(WIN32)
-    find_program(RTL_LAB_VERILATOR_BIN NAMES verilator_bin.exe HINTS
-      "$ENV{VERILATOR_ROOT}/bin" "D:/verilator/bin" "C:/msys64/mingw64/bin")
+    rtl_lab_find_windows_pe(_pe_seed)
+    if(_pe_seed)
+      set(RTL_LAB_VERILATOR_BIN "${_pe_seed}" CACHE FILEPATH "RTL_LAB_VERILATOR_BIN" FORCE)
+      set(VERILATOR_BIN "${_pe_seed}" CACHE FILEPATH "VERILATOR_BIN" FORCE)
+    endif()
   else()
     find_program(RTL_LAB_VERILATOR_BIN NAMES verilator_bin HINTS
       "$ENV{VERILATOR_ROOT}/bin" /usr/bin /usr/local/bin)
-  endif()
-  if(RTL_LAB_VERILATOR_BIN)
-    set(VERILATOR_BIN "${RTL_LAB_VERILATOR_BIN}" CACHE FILEPATH "VERILATOR_BIN" FORCE)
+    if(RTL_LAB_VERILATOR_BIN)
+      set(VERILATOR_BIN "${RTL_LAB_VERILATOR_BIN}" CACHE FILEPATH "VERILATOR_BIN" FORCE)
+    endif()
   endif()
 
   # First find_package() triggers cmake-conan if the provider is registered.
@@ -120,6 +169,24 @@ function(rtl_lab_find_verilator)
     endif()
   endif()
 
+  # Kit configs may find_program() VERILATOR_ROOT/bin (Perl wrapper on MSYS2).
+  # Re-assert the PE after that include so verilate() drives verilator_bin.exe.
+  if(WIN32)
+    set(VERILATOR_BIN "${RTL_LAB_VERILATOR_BIN}" CACHE FILEPATH "VERILATOR_BIN" FORCE)
+    rtl_lab_windows_file_is_pe("${VERILATOR_BIN}" _bin_is_pe)
+    if(NOT _bin_is_pe)
+      rtl_lab_find_windows_pe(_pe_fix)
+      if(NOT _pe_fix)
+        message(FATAL_ERROR
+          "VERILATOR_BIN is not a PE engine: ${VERILATOR_BIN}\n"
+          "Do not use share/verilator/bin/verilator_bin.exe (Perl wrapper).")
+      endif()
+      set(RTL_LAB_VERILATOR_BIN "${_pe_fix}" CACHE FILEPATH "RTL_LAB_VERILATOR_BIN" FORCE)
+      set(VERILATOR_BIN "${_pe_fix}" CACHE FILEPATH "VERILATOR_BIN" FORCE)
+      message(STATUS "RtlLabSim: replaced non-PE VERILATOR_BIN with ${_pe_fix}")
+    endif()
+  endif()
+
   if(NOT COMMAND verilate)
     message(FATAL_ERROR "verilate() missing after Verilator package load")
   endif()
@@ -143,7 +210,7 @@ function(rtl_lab_add_sim name)
   if(NOT ARG_PREFIX)
     set(ARG_PREFIX V${ARG_TOP})
   endif()
-  add_executable(${name} ${ARG_TB})
+  add_executable(${name} ${ARG_TB} "${RTL_LAB_CMAKE_DIR}/sc_time_stamp.cpp")
   target_include_directories(${name} PRIVATE
     "${RTL_LAB_REPO_ROOT}/verilator-wrap/common")
   target_compile_features(${name} PRIVATE cxx_std_17)

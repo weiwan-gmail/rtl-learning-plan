@@ -21,20 +21,31 @@ param(
 $ErrorActionPreference = "Stop"
 $Here = Split-Path -Parent $MyInvocation.MyCommand.Path
 
+function Test-MzPe([string]$Path) {
+    if (-not $Path -or -not (Test-Path -LiteralPath $Path)) { return $false }
+    $fs = [IO.File]::OpenRead($Path)
+    try {
+        return ($fs.ReadByte() -eq 0x4D -and $fs.ReadByte() -eq 0x5A)
+    } finally { $fs.Close() }
+}
+
 function Find-VerilatorBin {
     $cands = New-Object System.Collections.Generic.List[string]
-    if ($env:VERILATOR_ROOT) {
-        $cands.Add((Join-Path $env:VERILATOR_ROOT "bin\verilator_bin.exe"))
-    }
+    # Known PE bindirs first. MSYS2 $VERILATOR_ROOT\bin is a Perl wrapper .exe.
     $cands.Add("D:\verilator\bin\verilator_bin.exe")
     $cands.Add("C:\msys64\mingw64\bin\verilator_bin.exe")
+    if ($env:VERILATOR_ROOT) {
+        $cands.Add((Join-Path $env:VERILATOR_ROOT "bin\verilator_bin.exe"))
+        $cands.Add((Join-Path $env:VERILATOR_ROOT "..\bin\verilator_bin.exe"))
+        $cands.Add((Join-Path $env:VERILATOR_ROOT "..\..\bin\verilator_bin.exe"))
+    }
     foreach ($c in $cands) {
-        if ($c -and (Test-Path -LiteralPath $c)) {
+        if ($c -and (Test-MzPe $c)) {
             return (Resolve-Path -LiteralPath $c).Path
         }
     }
     $cmd = Get-Command verilator_bin.exe -ErrorAction SilentlyContinue
-    if ($cmd) { return $cmd.Source }
+    if ($cmd -and (Test-MzPe $cmd.Source)) { return $cmd.Source }
     return $null
 }
 
@@ -74,7 +85,8 @@ $buildPath = if ([System.IO.Path]::IsPathRooted($BuildDir)) { $BuildDir } else {
 $cmakeArgs = @(
     "-S", $Here,
     "-B", $buildPath,
-    "-DCMAKE_PROJECT_TOP_LEVEL_INCLUDES=$Here\conan_provider.cmake"
+    "-DCMAKE_PROJECT_TOP_LEVEL_INCLUDES=$Here\conan_provider.cmake",
+    "-DCONAN_INSTALL_ARGS=--build=missing;--no-remote"
 )
 if ($Generator) { $cmakeArgs += @("-G", $Generator) }
 if ($Generator -notmatch "Visual Studio") {

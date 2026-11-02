@@ -9,7 +9,7 @@ Recorded **2026-11-02** on this Cloud Agent Linux VM (`cursor`, Ubuntu, x86_64).
 | Verilator | local recipe `verilator/5.052` **packaged the system 5.020 kit** (did not rebuild from source) |
 | Conan | **2.34.0** (`pip install --user conan`) — same major/minor as PC2023 |
 
-Windows PC2023 (Conan 2.34 + withlimon `verilator_bin.exe`, worker `D:\CursorWorker`) is a follow-up; see [`../cmake-system/WINDOWS.md`](../cmake-system/WINDOWS.md).
+Windows PC2023 (Conan 2.34 + withlimon `verilator_bin.exe`, worker `D:\CursorWorker`) is proven in [`WINDOWS_PASS_EVIDENCE.md`](WINDOWS_PASS_EVIDENCE.md).
 
 ## Configure
 

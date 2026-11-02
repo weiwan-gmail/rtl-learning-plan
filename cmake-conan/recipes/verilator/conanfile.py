@@ -6,6 +6,15 @@ import shutil
 from pathlib import Path
 
 
+def _is_windows_pe(path: Path) -> bool:
+    """True for a real PE (MZ). False for Perl wrappers, including those named *.exe."""
+    try:
+        with path.open("rb") as fh:
+            return fh.read(2) == b"MZ"
+    except OSError:
+        return False
+
+
 class VerilatorConan(ConanFile):
     name = "verilator"
     version = "5.052"
@@ -29,16 +38,29 @@ class VerilatorConan(ConanFile):
         self.info.clear()
 
     def _local_windows_kit(self):
+        # MSYS2 cmake sets VERILATOR_ROOT=share/verilator; that bin/ is a Perl
+        # wrapper named verilator_bin.exe. Walk up to the prefix (mingw64) whose
+        # bin/verilator_bin.exe is the PE, same as protosim-apb.
         roots = []
         env_root = os.environ.get("VERILATOR_ROOT")
         if env_root:
-            roots.append(Path(env_root))
+            p = Path(env_root)
+            roots.extend([p, p.parent, p.parent.parent])
         roots.extend([Path(r"D:\verilator"), Path(r"C:\msys64\mingw64")])
+        seen = set()
         for root in roots:
+            try:
+                root = root.resolve()
+            except OSError:
+                continue
+            key = str(root).lower()
+            if key in seen:
+                continue
+            seen.add(key)
             pe = root / "bin" / "verilator_bin.exe"
             hdr = root / "include" / "verilated.h"
             hdr2 = root / "share" / "verilator" / "include" / "verilated.h"
-            if pe.is_file() and (hdr.is_file() or hdr2.is_file()):
+            if pe.is_file() and _is_windows_pe(pe) and (hdr.is_file() or hdr2.is_file()):
                 return root
         return None
 
@@ -58,18 +80,43 @@ class VerilatorConan(ConanFile):
         kit = self._local_windows_kit()
 
         pkg = Path(self.package_folder)
+
+        def copy_pe_bins(bin_src: Path) -> Path:
+            pkg_bin = pkg / "bin"
+            found = None
+            if not bin_src.is_dir():
+                raise ConanException(f"no bin dir at {bin_src}")
+            for name in ("verilator_bin.exe", "verilator.exe"):
+                src = bin_src / name
+                if src.is_file() and _is_windows_pe(src):
+                    self._copy_file(src, pkg_bin / name)
+                    if name == "verilator_bin.exe":
+                        found = pkg_bin / name
+            if found is None:
+                raise ConanException(
+                    f"{bin_src}/verilator_bin.exe is missing or is not a PE (MZ). "
+                    "Do not package share/verilator/bin/verilator_bin.exe "
+                    "(Perl wrapper). See https://github.com/withlimon/verilator-windows"
+                )
+            return found
+
         if kit is not None:
             self.output.info(f"Packaging local withlimon kit at {kit}")
-            bin_src = kit / "bin"
-            if bin_src.is_dir():
-                for f in bin_src.iterdir():
-                    if f.is_file():
-                        self._copy_file(f, pkg / "bin" / f.name)
+            copy_pe_bins(kit / "bin")
             inc = kit / "include"
             if not (inc / "verilated.h").is_file():
                 inc = kit / "share" / "verilator" / "include"
             if inc.is_dir():
                 shutil.copytree(inc, pkg / "include", dirs_exist_ok=True)
+            # Copy the kit cmake only after bin/ holds the PE. Then
+            # find_program(VERILATOR_ROOT/bin) hits the packaged PE, not the
+            # MSYS2 share/verilator/bin Perl wrapper. Needed so --make json
+            # matches engine 5.046 (the 5.020 fallback spoke --make cmake).
+            kit_cfg = kit / "verilator-config.cmake"
+            if not kit_cfg.is_file():
+                kit_cfg = kit / "share" / "verilator" / "verilator-config.cmake"
+            if kit_cfg.is_file():
+                shutil.copy2(kit_cfg, pkg / "verilator-config.cmake")
         else:
             self.output.info("No local withlimon kit; downloading withlimon tarball")
             get(self, **self.conan_data["sources"][self.version],
@@ -79,26 +126,25 @@ class VerilatorConan(ConanFile):
             candidates = [src] + [p for p in src.iterdir() if p.is_dir()]
             unpacked = None
             for c in candidates:
-                if (c / "bin" / "verilator_bin.exe").is_file():
+                pe_src = c / "bin" / "verilator_bin.exe"
+                if pe_src.is_file() and _is_windows_pe(pe_src):
                     unpacked = c
                     break
             if unpacked is None:
                 raise ConanException(
-                    "withlimon tarball missing bin/verilator_bin.exe. "
+                    "withlimon tarball missing PE bin/verilator_bin.exe. "
                     "See https://github.com/withlimon/verilator-windows"
                 )
-            for f in (unpacked / "bin").iterdir():
-                if f.is_file():
-                    self._copy_file(f, pkg / "bin" / f.name)
+            copy_pe_bins(unpacked / "bin")
             inc = unpacked / "include"
             if inc.is_dir():
                 shutil.copytree(inc, pkg / "include", dirs_exist_ok=True)
 
         pe = pkg / "bin" / "verilator_bin.exe"
-        if not pe.is_file():
+        if not pe.is_file() or not _is_windows_pe(pe):
             raise ConanException(
-                "Windows package missing bin/verilator_bin.exe (must be the PE engine, "
-                "not the extensionless Perl driver)"
+                "Windows package missing PE bin/verilator_bin.exe (must be the PE engine, "
+                "not the extensionless Perl driver or share/... Perl wrapper)"
             )
 
         fallback = Path(self.export_sources_folder) / "verilator-config.fallback.cmake"

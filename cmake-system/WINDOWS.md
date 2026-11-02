@@ -29,6 +29,8 @@ The withlimon tarball does **not** ship `verilator-config.cmake`. Shared helper 
 
 MSYS2 unpack of the same tarball: `C:\msys64\mingw64\bin\verilator_bin.exe`.
 
+Do **not** run `C:\msys64\mingw64\share\verilator\bin\verilator_bin.exe` — that file is a Perl wrapper with a `.exe` suffix (not a PE). CMake, `build_sim.ps1`, and the Conan recipe MZ-check `verilator_bin.exe` and walk from `VERILATOR_ROOT=share/verilator` up to `mingw64\bin`.
+
 ## Environment (once)
 
 User environment:
@@ -71,7 +73,7 @@ conan profile detect --force
 powershell -File .\build_sim.ps1
 ```
 
-The script `conan export`s `recipes/verilator` (withlimon 5.052 tarball, or the local `D:\verilator` kit if present) and configures with `conan_provider.cmake`.
+The script `conan export`s `recipes/verilator` (withlimon 5.052 tarball, or the local `D:\verilator` / MSYS2 kit if present) and configures with `conan_provider.cmake`. `conan install` uses `--no-remote` so a password-prompting extra remote cannot block the local recipe.
 
 Profile file in-tree: `cmake-conan/profiles/windows-msvc`. Override:
 
@@ -88,3 +90,5 @@ cmake -S cmake-conan -B build-conan -DCMAKE_BUILD_TYPE=Release -DCONAN_HOST_PROF
 - Do not run extensionless `bin\verilator` from Explorer or CMD.
 - Do not point `VERILATOR=` at the Perl driver.
 - Do not change original lab Makefiles or `verilator-wrap/` / `cocotb-wrap/` (cocotb stays Make-only).
+
+PC2023 proof: [`WINDOWS_PASS_EVIDENCE.md`](WINDOWS_PASS_EVIDENCE.md), [`../cmake-conan/WINDOWS_PASS_EVIDENCE.md`](../cmake-conan/WINDOWS_PASS_EVIDENCE.md).

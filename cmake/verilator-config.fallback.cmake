@@ -46,6 +46,21 @@ if (NOT VERILATOR_BIN)
   message(FATAL_ERROR "Cannot find verilator_bin excecutable.")
 endif()
 
+# 5.020 Debian kits speak `--make cmake`. withlimon / MSYS2 5.046 speak
+# `--make json` and reject `cmake`. Probe the engine (do not trust --version
+# alone; `--make cmake --version` still prints a banner on 5.046).
+set(VERILATOR_MAKE_SYSTEM "cmake")
+execute_process(
+  COMMAND "${VERILATOR_BIN}" --make json --version
+  RESULT_VARIABLE _vlt_json_rc
+  OUTPUT_VARIABLE _vlt_json_out
+  ERROR_VARIABLE _vlt_json_err
+)
+if(NOT _vlt_json_err MATCHES "Unknown --make")
+  set(VERILATOR_MAKE_SYSTEM "json")
+endif()
+message(STATUS "verilator-config.fallback: --make ${VERILATOR_MAKE_SYSTEM}  BIN=${VERILATOR_BIN}")
+
 set(verilator_FOUND 1)
 
 include(CheckCXXSourceCompiles)
@@ -220,8 +235,9 @@ function(verilate TARGET)
 
   file(MAKE_DIRECTORY ${VDIR})
 
-  set(VERILATOR_COMMAND "${VERILATOR_BIN}" --compiler ${COMPILER}
-                        --prefix ${VERILATE_PREFIX} --Mdir ${VDIR} --make cmake
+  set(VERILATOR_COMMAND "${CMAKE_COMMAND}" -E env "VERILATOR_ROOT=${VERILATOR_ROOT}"
+                        "${VERILATOR_BIN}" --compiler ${COMPILER}
+                        --prefix ${VERILATE_PREFIX} --Mdir ${VDIR} --make ${VERILATOR_MAKE_SYSTEM}
                         ${VERILATOR_ARGS} ${VERILATE_VERILATOR_ARGS}
                         ${VERILATE_SOURCES})
 

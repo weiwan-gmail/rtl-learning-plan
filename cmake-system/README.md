@@ -42,7 +42,7 @@ cd cmake-system
 .\build_sim.ps1
 ```
 
-Copy-paste notes (worker `D:\CursorWorker`, Conan **not** required here): [`WINDOWS.md`](WINDOWS.md).
+Copy-paste notes (worker `D:\CursorWorker`, Conan **not** required here): [`WINDOWS.md`](WINDOWS.md). PC2023 proof: [`WINDOWS_PASS_EVIDENCE.md`](WINDOWS_PASS_EVIDENCE.md).
 
 ## `sim-fail` semantics
 
