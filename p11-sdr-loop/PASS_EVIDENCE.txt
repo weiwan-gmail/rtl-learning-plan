@@ -1,0 +1,22 @@
+iverilog -g2005 -Wall -Wno-timescale -o sim_sdr_loop tb_sdr_loop.v sdr_loop.v ../p3-fir-nco/nco.v ../p3-fir-nco/fir4.v ../p7-cic/cic_decim.v
+vvp sim_sdr_loop
+CASE DC A=3 n=256
+METRIC DC settle=288 (= A*sumH*(R*M)^N) n_out=64
+PASS sdr_loop DC bit-exact A=3
+CASE DC A=-2 n=128
+METRIC DC settle=-192 (= A*sumH*(R*M)^N) n_out=32
+PASS sdr_loop DC bit-exact A=-2
+CASE TONE fw=0x10000000 n=512
+METRIC RMSE=0.000000 SNR_dB=999.000000 n_out=128
+PASS sdr_loop TONE bit-exact fw=0x10000000
+CASE TONE fw=0x04000000 n=512
+METRIC RMSE=0.000000 SNR_dB=999.000000 n_out=128
+PASS sdr_loop TONE bit-exact fw=0x04000000
+PASS sdr_loop all cases bit-exact
+tb_sdr_loop.v:295: $finish called at 15665000 (1ps)
+python3 check_sdr_loop.py
+PASS check_sdr_loop.py DC settle (= A*6*16)
+PASS check_sdr_loop.py TONE model RMSE=0.0 SNR_dB=999.0 n_out=128
+PASS check_sdr_loop.py NCO fw=0 → zero chain
+PASS check_sdr_loop.py
+ALL PASS
