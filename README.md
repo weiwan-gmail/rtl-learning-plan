@@ -1,8 +1,8 @@
-# RTL 学习阶梯（P1–P11）
+# RTL 学习阶梯（P1–P12）
 
 Wei 的 Verilator / iverilog 动手练习树。路线说明见 [`RTL_Learning_Roadmap_Wei.md`](RTL_Learning_Roadmap_Wei.md)。
 
-- **进度：** P1–P11 已完成（本地绿 + 已 push）；**N5 PWM → P6**、**N6 CIC → P7**、**Track C I6 → P8** 三角形光栅、**I7 → P9** tiny-gpu **matmul**、**I5×I6 → P10** VGA+三角 FB、**Track B A3-lite → P11** SDR 环回（NCO→FIR→CIC）已落地。RISC-V 阶梯已完成；**N7** = 免费 NPTEL 选讲清单（DONE）→ [`n7-nptel-mapping-sp/`](n7-nptel-mapping-sp/)。其余练习队列与中高级补强见路线图「接着要做的练习队列」与 **§7**。
+- **进度：** P1–P12 已完成（本地绿 + 已 push）；**N5 PWM → P6**、**N6 CIC → P7**、**Track C I6 → P8** 三角形光栅、**I7 → P9** tiny-gpu **matmul**、**I5×I6 → P10** VGA+三角 FB、**Track B A3-lite → P11** SDR 环回（NCO→FIR→CIC）、**A5 → P12** SymbiYosys FIFO formal 已落地。RISC-V 阶梯已完成；**N7** = 免费 NPTEL 选讲清单（DONE）→ [`n7-nptel-mapping-sp/`](n7-nptel-mapping-sp/)。其余练习队列与中高级补强见路线图「接着要做的练习队列」与 **§7**。
 
 ## 阶梯
 
@@ -19,8 +19,9 @@ Wei 的 Verilator / iverilog 动手练习树。路线说明见 [`RTL_Learning_Ro
 | `p9-tinygpu-matmul/` | tiny-gpu **2×2 matmul**（复用 P5 子模块；I7） | `cd p9-tinygpu-matmul && make all` |
 | `p10-vga-tri/` | P4 VGA 时序 + P8 三角 FB（NN×10） | `cd p10-vga-tri && make all` |
 | `p11-sdr-loop/` | Track B：NCO→FIR→CIC 教学环回 | `cd p11-sdr-loop && make all` |
+| `p12-fifo-formal/` | A5：SymbiYosys formal（复用 P2 FIFO） | `cd p12-fifo-formal && make all` |
 
-依赖：`iverilog`（P1–P11）、`make`、`python3`（P3/P7/P8/P11）。P5/P9 另需 `sv2v`、`python3-venv`、`cocotb<2`、`libpython`。
+依赖：`iverilog`（P1–P11）、`make`、`python3`（P3/P7/P8/P11）。P5/P9 另需 `sv2v`、`python3-venv`、`cocotb<2`、`libpython`。**P12** 另需 `yosys`、`sby`（SymbiYosys）、`z3`（见 `p12-fifo-formal/README.md`）。
 
 ## P5 快速开始
 
@@ -86,6 +87,14 @@ cd rtl-learning-plan/p11-sdr-loop && make all
 
 复用 `p3-fir-nco/{nco,fir4}.v` + `p7-cic/cic_decim.v`：NCO/DC → FIR → CIC 抽取；DC settle + tone RMSE/SNR bit-exact。通过证据见 `p11-sdr-loop/PASS_EVIDENCE.txt`。
 
+## P12 / A5 快速开始
+
+```bash
+cd rtl-learning-plan/p12-fifo-formal && make all
+```
+
+复用 `p2-sync-fifo/sync_fifo.v`；SymbiYosys BMC+cover（`smtbmc z3`）证明 empty/full 互斥、count 一致、assume 下无溢出/下溢。依赖与安装见 `p12-fifo-formal/README.md`。通过证据见 `p12-fifo-formal/PASS_EVIDENCE.txt`。
+
 ## 许可
 
-P1–P4、P6–P8、P10–P11 为练习代码。P5/P9 上游 RTL 属 [adam-maj/tiny-gpu](https://github.com/adam-maj/tiny-gpu)（以该仓库 LICENSE 为准）；本仓库仅保留包装脚本与证据，不 vendoring 上游源码。P9 复用 P5 子模块，不二次 clone。
+P1–P4、P6–P8、P10–P12 为练习代码。P5/P9 上游 RTL 属 [adam-maj/tiny-gpu](https://github.com/adam-maj/tiny-gpu)（以该仓库 LICENSE 为准）；本仓库仅保留包装脚本与证据，不 vendoring 上游源码。P9 复用 P5 子模块，不二次 clone。
