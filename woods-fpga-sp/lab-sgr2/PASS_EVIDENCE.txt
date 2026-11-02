@@ -1,0 +1,10 @@
+make: Entering directory '/workspace/rtl-learning-plan/woods-fpga-sp/lab-sgr2'
+iverilog -g2005 -Wall -Wno-timescale -o sim_sgr tb_sgr2.v sgr_step.v
+vvp sim_sgr
+PASS sgr_step n=9 mismatches=0
+METRIC RMSE=0 SNR_dB=999 NULL_R2=1 NO_SQRT=1
+tb_sgr2.v:54: $finish called at 210000 (1ps)
+python3 check_sgr2.py
+PASS check_sgr2.py
+ALL PASS
+make: Leaving directory '/workspace/rtl-learning-plan/woods-fpga-sp/lab-sgr2'

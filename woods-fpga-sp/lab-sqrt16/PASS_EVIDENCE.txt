@@ -1,0 +1,10 @@
+make: Entering directory '/workspace/rtl-learning-plan/woods-fpga-sp/lab-sqrt16'
+iverilog -g2005 -Wall -Wno-timescale -o sim_sqrt tb_sqrt16.v sqrt16.v
+vvp sim_sqrt
+PASS sqrt16 n=92 mismatches=0
+METRIC RMSE=0 SNR_dB=999
+tb_sqrt16.v:56: $finish called at 10150000 (1ps)
+python3 check_sqrt16.py
+PASS check_sqrt16.py
+ALL PASS
+make: Leaving directory '/workspace/rtl-learning-plan/woods-fpga-sp/lab-sqrt16'

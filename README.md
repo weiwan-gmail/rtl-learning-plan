@@ -2,7 +2,7 @@
 
 Wei 的 Verilator / iverilog 动手练习树。路线说明见 [`RTL_Learning_Roadmap_Wei.md`](RTL_Learning_Roadmap_Wei.md)。
 
-- **进度：** P1–P12 已完成（本地绿 + 已 push）；**N5 PWM → P6**、**N6 CIC → P7**、**Track C I6 → P8** 三角形光栅、**I7 → P9** tiny-gpu **matmul**、**I5×I6 → P10** VGA+三角 FB、**Track B A3-lite → P11** SDR 环回（NCO→FIR→CIC）、**A5 → P12** SymbiYosys FIFO formal 已落地。RISC-V 阶梯已完成；**N7** = 免费 NPTEL 选讲清单（DONE）→ [`n7-nptel-mapping-sp/`](n7-nptel-mapping-sp/)。**R2/Woods** 书 → RTL 仿真 Batch 1–3（DONE）→ [`woods-fpga-sp/`](woods-fpga-sp/)（14 labs：…+RLS1/div/RNS(5,7)；Vivado/HLS 为 PLACEHOLDER）。其余练习队列与中高级补强见路线图「接着要做的练习队列」与 **§7**。
+- **进度：** P1–P12 已完成（本地绿 + 已 push）；**N5 PWM → P6**、**N6 CIC → P7**、**Track C I6 → P8** 三角形光栅、**I7 → P9** tiny-gpu **matmul**、**I5×I6 → P10** VGA+三角 FB、**Track B A3-lite → P11** SDR 环回（NCO→FIR→CIC）、**A5 → P12** SymbiYosys FIFO formal 已落地。RISC-V 阶梯已完成；**N7** = 免费 NPTEL 选讲清单（DONE）→ [`n7-nptel-mapping-sp/`](n7-nptel-mapping-sp/)。**R2/Woods** 书 → RTL 仿真 Batch 1–4（DONE，RTL 课轨完成）→ [`woods-fpga-sp/`](woods-fpga-sp/)（17 labs：…+sqrt/LNS/SGR；Vivado/HLS PLACEHOLDER）。其余练习队列与中高级补强见路线图「接着要做的练习队列」与 **§7**。
 
 ## 阶梯
 
@@ -20,7 +20,7 @@ Wei 的 Verilator / iverilog 动手练习树。路线说明见 [`RTL_Learning_Ro
 | `p10-vga-tri/` | P4 VGA 时序 + P8 三角 FB（NN×10） | `cd p10-vga-tri && make all` |
 | `p11-sdr-loop/` | Track B：NCO→FIR→CIC 教学环回 | `cd p11-sdr-loop && make all` |
 | `p12-fifo-formal/` | A5：SymbiYosys formal（复用 P2 FIFO） | `cd p12-fifo-formal && make all` |
-| `woods-fpga-sp/` | Woods FPGA SP 书 → RTL labs（Batch 1–3，14 labs） | `cd woods-fpga-sp && make all` |
+| `woods-fpga-sp/` | Woods FPGA SP 书 → RTL labs（Batch 1–4，17 labs，课轨完成） | `cd woods-fpga-sp && make all` |
 
 依赖：`iverilog`（P1–P11）、`make`、`python3`（P3/P7/P8/P11）。P5/P9 另需 `sv2v`、`python3-venv`、`cocotb<2`、`libpython`。**P12** 另需 `yosys`、`sby`（SymbiYosys）、`z3`（见 `p12-fifo-formal/README.md`）。
 

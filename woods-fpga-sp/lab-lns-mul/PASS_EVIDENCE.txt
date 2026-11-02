@@ -1,0 +1,10 @@
+make: Entering directory '/workspace/rtl-learning-plan/woods-fpga-sp/lab-lns-mul'
+iverilog -g2005 -Wall -Wno-timescale -o sim_lns tb_lns_mul.v lns_mul8.v
+vvp sim_lns
+PASS lns_mul8 n=1024 mismatches=0
+METRIC RMSE=0 SNR_dB=999 DOMAIN=1..32
+tb_lns_mul.v:367: $finish called at 20510000 (1ps)
+python3 check_lns_mul.py
+PASS check_lns_mul.py max_abs_err=2
+ALL PASS
+make: Leaving directory '/workspace/rtl-learning-plan/woods-fpga-sp/lab-lns-mul'

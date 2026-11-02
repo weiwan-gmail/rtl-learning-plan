@@ -66,6 +66,16 @@ cd woods-fpga-sp && make all
 | `lab-div-nr/` | Ch3 16÷16 restoring 除法 |
 | `lab-rns35/` | Ch3 RNS(5,7) 加/乘 + CRT |
 
+## Batch 4 lab（RTL 课轨收官）
+
+| lab | 主题 |
+|-----|------|
+| `lab-sqrt16/` | Ch3 逐位恢复式开方 |
+| `lab-lns-mul/` | Ch3 LNS 乘法（1..32 LUT） |
+| `lab-sgr2/` | Ch11 SGR/未归一化 Givens 步 |
+
+`NEXT.md`：可仿真 RTL **完成**；仅余 PLACEHOLDER / 可选 Verilator。
+
 依赖：`iverilog`、`vvp`、`python3`（无需 numpy）。
 
 ## 许可与版权
