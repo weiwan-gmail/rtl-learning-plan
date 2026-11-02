@@ -1,0 +1,43 @@
+P9 / I7 tiny-gpu matmul — PASS evidence
+path: p9-tinygpu-matmul (wrapper) + p5-tiny-gpu/tiny-gpu (shared submodule adam-maj/tiny-gpu @ 02b6c2c)
+dims: 2x2  A=[[1,2],[3,4]]  B=[[1,2],[3,4]]  -> C=[[7,10],[15,22]] @ data mem 8..11
+threads: 4; kernel uses MUL/DIV/SUB/CMP/BRn + LDR/STR (inner k-loop N=2)
+toolchain: iverilog 12 + sv2v + cocotb 1.9.2 (venv in submodule; NOT cocotb 2.x)
+command: cd p9-tinygpu-matmul && make all  (= ./run_matmul.sh -> make test_matmul)
+make_exit: 0
+
+=== cocotb (from sim_matmul.log) ===
+     0.00ns INFO     cocotb                             Running on Icarus Verilog version 12.0 (stable)
+     0.00ns INFO     cocotb                             Running tests with cocotb v1.9.2 from /workspace/rtl-learning-plan/p5-tiny-gpu/tiny-gpu/.venv/lib/python3.13/site-packages/cocotb
+     0.00ns INFO     cocotb.regression                  Found test test.test_matmul.test_matadd
+                                                          ** test.test_matmul.test_matadd   PASS    12300001.00           0.21   59519623.84  **
+                                                          ** TESTS=1 PASS=1 FAIL=0 SKIP=0           12300001.00           0.21   57850268.00  **
+
+=== test/logs/log_20261102091633.txt (submodule) ===
+Completed in 491 cycles
+
+
+DATA MEMORY
++----------------+
+| Addr | Data     |
++----------------+
+| 0    | 1        |
+| 1    | 2        |
+| 2    | 3        |
+| 3    | 4        |
+| 4    | 1        |
+| 5    | 2        |
+| 6    | 3        |
+| 7    | 4        |
+| 8    | 7        |
+| 9    | 10       |
+| 10   | 15       |
+| 11   | 22       |
++----------------+
+
+matrix_check: A·B -> C
+A [[1, 2], [3, 4]]
+B [[1, 2], [3, 4]]
+C [7, 10, 15, 22]
+expected [7, 10, 15, 22]
+MATCH True (cocotb asserts in test/test_matmul.py)
