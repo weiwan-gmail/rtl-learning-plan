@@ -1,0 +1,18 @@
+iverilog -g2005 -Wall -Wno-timescale -o sim_vga_tri tb_vga_tri.v vga_tri.v ../p4-vga/vga_timing.v ../p8-tri-raster/tri_raster.v
+vvp sim_vga_tri
+METRIC golden_filled=676 (P8 case1 expect 676)
+METRIC tri_fill done
+METRIC hsync_period[0]=800 (expect 800)
+METRIC hsync_period[1]=800 (expect 800)
+METRIC hsync_period[2]=800 (expect 800)
+METRIC hsync_period[3]=800 (expect 800)
+METRIC hsync_width=96 (expect 96)
+METRIC vsync_period=420000 (expect 420000)
+METRIC vsync_width_clks=1600 (expect 1600)
+METRIC active_white_pixels=67600 (expect 67600 = 676*10*10)
+METRIC wrote frame.ppm 64x48 (VGA-sampled centers)
+PASS vga_tri h_periods_ok=4 vsync_period=420000 filled_fb=676 filled_vga=67600 scale=10x10
+PASS vga_tri sync+pixels bit-exact
+ALL PASS
+# Strategy: P4 640x480 timing + P8 64x48 FB, nearest-neighbor scale 10x10
+# Date: 2026-11-02 Asia/Shanghai

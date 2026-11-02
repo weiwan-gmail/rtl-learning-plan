@@ -1,9 +1,9 @@
 # RTL 学习路线图（Verilator / iverilog 仿真友好）
 **学习者：** Wei（中文）  
 **已有阶梯：** tinyriscv → picorv32 → FemtoRV/`learn-fpga` → darkriscv → SERV  
-**执行状态（2026-11-02 Asia/Shanghai）：** P1–P9 **DONE**（本地仿真绿 + 已 push）；**N5→P6**、**N6→P7**、**I6→P8** 三角光栅、**I7→P9** tiny-gpu matmul；**N7** = 免费 NPTEL 选讲清单 **DONE**（`n7-nptel-mapping-sp/`）；RISC-V 阶梯 **DONE**。  
-**产出性质：** PLAN + 已落地练习树（`p1`–`p9`）+ N7 选讲文档；后续 unpaid 工作仍按 PLAN 节奏推进，不强制一次开多个大核。  
-**研究日 / 修订：** 2026-11-02（Asia/Shanghai）— P9/I7 matmul + P8/I6 三角光栅 + P7/N6 CIC + N7 NPTEL 选讲清单落地；R1/R2 仍可选付费、本路径不买  
+**执行状态（2026-11-02 Asia/Shanghai）：** P1–P10 **DONE**（本地仿真绿 + 已 push）；**N5→P6**、**N6→P7**、**I6→P8** 三角光栅、**I7→P9** tiny-gpu matmul、**I5×I6→P10** VGA+三角 FB；**N7** = 免费 NPTEL 选讲清单 **DONE**（`n7-nptel-mapping-sp/`）；RISC-V 阶梯 **DONE**。  
+**产出性质：** PLAN + 已落地练习树（`p1`–`p10`）+ N7 选讲文档；后续 unpaid 工作仍按 PLAN 节奏推进，不强制一次开多个大核。  
+**研究日 / 修订：** 2026-11-02（Asia/Shanghai）— P10 VGA+三角 FB + P9/I7 matmul + P8/I6 三角光栅 + P7/N6 CIC + N7 NPTEL 选讲清单落地；R1/R2 仍可选付费、本路径不买  
 **仿真工具偏好：** Verilator（大设计 / C++ cosim）+ iverilog（小 DUT / 快速自检）+ GTKWave
 
 ---
@@ -142,7 +142,7 @@
 **Est.：** 1–2 周  
 **Depends on：** B5；可与 RISC-V 阶梯并行
 
-#### I5. VGA / 时序视频与帧缓冲  
+#### I5. VGA / 时序视频与帧缓冲  — **DONE → P4**（色条）+ **P10**（三角 FB 扫出）  
 **中文名：** VGA 时序与 Framebuffer  
 **英文名：** VGA Timing & Framebuffers  
 **Why：** DIY GPU 的显示后端；Verilator+SDL 可「看见」像素。  
@@ -275,7 +275,7 @@
 ### Track C — Graphics / DIY GPU
 | 顺序 | Topics | 与现有 RISC-V 阶梯关系 |
 |------|--------|------------------------|
-| C-1 | I5 VGA + Project F Verilator/SDL | **高度可并行** |
+| C-1 | I5 VGA（P4 色条 + **P10** 三角 FB） | **DONE → P4/P10** |
 | C-2 | I6 矩形/三角光栅 | **DONE → P8** |
 | C-3 | I7 tiny-gpu SIMT | **DONE → P9**（matmul；P5=matadd） |
 | C-4 | A4 TinyGPU v2 / Nyuzi | **收官**；与 A1 二选一先做，避免双大项目 |
@@ -307,10 +307,11 @@ Track C:            I5 ==== I6 == I7 ========= A4 ===
 | **P7** | CIC 抽取器 | `cic_decim`（N=2,R=4,M=1） | iverilog + Python golden | 绿 + bit-exact `$fatal`；`PASS cic_decim` | 0.5–1 天 | B5/I4；N6 落地 |
 | **P8** | 三角形光栅 | `tri_raster`（64×48 edge-function） | iverilog + Python golden | 绿 + 逐像素 `$fatal`；`PASS tri_raster` | 0.5–1 天 | I5/I6 |
 | **P9** | tiny-gpu **matmul** | 同顶层；官方 `make test_matmul` | iverilog + cocotb 1.9.x | 绿 + 2×2 C=`[7,10,15,22]`；`TESTS=1 PASS=1` | 0.5–1 天 | **I7 DONE**；复用 P5 子模块 |
+| **P10** | VGA + 三角 FB | `vga_tri`（P4 timing × P8 FB，NN×10） | iverilog | 绿 + h/vsync + active bit-exact；`PASS vga_tri` | 0.5 天 | I5×I6；复用 P4/P8 RTL |
 
 **执行顺序理由：** P1–P2 固化仿真纪律 → P3 打开 DSP 黄金模型习惯 → P4 打开「可视化」验收 → P5 第一次碰并行执行模型 → P6/P7 补 PWM 与 CIC；全部不依赖 Vivado。
 
-**P1–P9 状态：** 全部 **DONE**（本地 + 已 push；P6=`p6-pwm/`；P7=`p7-cic/`；P8=`p8-tri-raster/` I6；**P9=`p9-tinygpu-matmul/` I7 matmul**）。下面是接着要做的练习队列。
+**P1–P10 状态：** 全部 **DONE**（本地 + 已 push；P6=`p6-pwm/`；P7=`p7-cic/`；P8=`p8-tri-raster/` I6；P9=`p9-tinygpu-matmul/` I7；**P10=`p10-vga-tri/` I5×I6**）。下面是接着要做的练习队列。
 
 ### 接着要做的练习队列
 
@@ -325,6 +326,7 @@ Track C:            I5 ==== I6 == I7 ========= A4 ===
 | **N7** | **免费** R3 NPTEL 选讲清单（108106149） | 算法→架构；**不买** R1/R2 | **DONE → `n7-nptel-mapping-sp/`** |
 | **N8 / I6** | 三角形光栅（Track C） | edge-function → FB；PPM + golden | **DONE → P8 `p8-tri-raster/`** |
 | **N9 / I7** | tiny-gpu SIMT 加深（matmul） | 官方 `test_matmul` 2×2；复用 P5 子模块 | **DONE → P9 `p9-tinygpu-matmul/`** |
+| **N10 / I5×I6** | VGA 扫出三角 FB | P4 timing + P8 FB；NN×10；PPM | **DONE → P10 `p10-vga-tri/`** |
 
 ---
 
@@ -374,12 +376,12 @@ Track C:            I5 ==== I6 == I7 ========= A4 ===
 
 ---
 
-## 6. 建议的近期节奏（PLAN；P1–P9 已执行）
+## 6. 建议的近期节奏（PLAN；P1–P10 已执行）
 
-1. **已完成：** P1–P9 本地仿真绿并 push（含 N5→P6 PWM、N6→P7 CIC、**I6→P8** 三角光栅、**I7→P9** tiny-gpu matmul）；RISC-V 阶梯 DONE；工具链 `iverilog`/`verilator`/`gtkwave` 已可用。  
-2. **接着执行：** N5/N6/N7/I6/I7 已完成；队列侧重 **N1–N4** RISC-V 精读/仿真；Track C 下一站可选 A4（TinyGPU v2 / Nyuzi）；Track B 可按 `n7-nptel-mapping-sp/LECTURE_PICKS.md` 选听后改写 P3/P7 架构。  
+1. **已完成：** P1–P10 本地仿真绿并 push（含 N5→P6 PWM、N6→P7 CIC、**I6→P8** 三角光栅、**I7→P9** tiny-gpu matmul、**I5×I6→P10** VGA+三角）；RISC-V 阶梯 DONE；工具链 `iverilog`/`verilator`/`gtkwave` 已可用。  
+2. **接着执行：** N5/N6/N7/I6/I7/N10 已完成；队列侧重 **N1–N4** RISC-V 精读/仿真；Track C 下一站可选 A4（TinyGPU v2 / Nyuzi）；Track B 可按 `n7-nptel-mapping-sp/LECTURE_PICKS.md` 选听后改写 P3/P7 架构。  
 3. **并行阅读：** FemtoRV/`learn-fpga` 文档 + Smith DSP Guide Ch.1–5；中高级补强见 **§7**（**R3/N7 已出选讲清单**；R1/R2 仅有预算再开）。  
-4. **Track 选择：** 若兴趣偏无线电 → 继续 Track B（§7 / 串级 DSP）；偏画面 → Track C 已完成 I5/I6/I7，可延伸 A4；偏 CPU → 坚持 N1–N4 与现有 fork 对齐。  
+4. **Track 选择：** 若兴趣偏无线电 → 继续 Track B（§7 / 串级 DSP）；偏画面 → Track C 已完成 I5/I6/I7（含 P10 接线），可延伸 A4；偏 CPU → 坚持 N1–N4 与现有 fork 对齐。  
 5. **边界（本阶段仍适用）：** 练习目录本地新建即可；fork 仅限计划中的 RISC-V 阶梯（从 picorv32 起）；避开 Vivado-only 依赖「为了跑一个教学 FIR」。R1/R2 仍为可选付费；**N7 已用免费 R3 选讲闭环**，不强制购买。
 
 ---
@@ -399,4 +401,4 @@ Track C:            I5 ==== I6 == I7 ========= A4 ===
 
 ---
 
-*文档修订 — 2026-11-02 Asia/Shanghai — P1–P9（含 I6 三角光栅 + I7 matmul）+ N7 NPTEL 选讲 DONE；R1/R2 仍可选；§7 r/FPGA 补强*
+*文档修订 — 2026-11-02 Asia/Shanghai — P1–P10（含 I6 三角光栅 + I7 matmul + P10 VGA×三角）+ N7 NPTEL 选讲 DONE；R1/R2 仍可选；§7 r/FPGA 补强*
