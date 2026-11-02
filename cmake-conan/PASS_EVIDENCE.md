@@ -1,6 +1,6 @@
 # cmake-conan PASS evidence (Linux Cursor VM)
 
-Recorded **2026-11-02** on this Cloud Agent Linux VM (`cursor`, Ubuntu, x86_64). This file is the original **5-lab** Conan run. The expanded 19-lab wrap matrix is proven on the same helpers via [`../cmake-system/PASS_EVIDENCE.md`](../cmake-system/PASS_EVIDENCE.md) (`cmake/labs.cmake` + `RtlLabSim.cmake`; cmake-conan `CMakeLists.txt` still a thin `rtl_lab_sim_setup()` wrapper). Conan was not re-installed on the expand-matrix VM.
+Recorded **2026-11-02** on this Cloud Agent Linux VM (`cursor`, Ubuntu, x86_64). This file is the original **5-lab** Conan run. The expanded 30-lab wrap matrix is proven on the same helpers via [`../cmake-system/PASS_EVIDENCE.md`](../cmake-system/PASS_EVIDENCE.md) (`cmake/labs.cmake` + `RtlLabSim.cmake`; cmake-conan `CMakeLists.txt` still a thin `rtl_lab_sim_setup()` wrapper, **no cocotb**). Conan was not re-installed on the expand-matrix VM.
 
 | Tool | Version |
 |------|---------|

@@ -8,6 +8,8 @@ cd cocotb-wrap && make all          # all five
 cd cocotb-wrap/woods-lab-lms && make
 ```
 
+Optional CMake (separate project, **not** `cmake-system` / `RtlLabSim`): [`../cmake-cocotb/`](../cmake-cocotb/). Same Makefiles as above; soft-skips if `.venv` or Verilator is missing.
+
 DUT RTL is compiled from the original lab path (no copy). Simulator is Verilator.
 
 ## Windows (PC2023)

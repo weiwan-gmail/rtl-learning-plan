@@ -2,6 +2,7 @@
 **/build/
 /build-system/
 /build-conan/
+/build-cocotb/
 CMakeUserPresets.json
 **/obj_dir/
 **/sim_build/

@@ -26,6 +26,7 @@ Wei 的 Verilator / iverilog 动手练习树。路线说明见 [`RTL_Learning_Ro
 | `cocotb-wrap/` | **Optional** cocotb+Verilator (LMS/CORDIC/DA/FIR random goldens only) | `cd cocotb-wrap && make venv && make all` |
 | `cmake-system/` | **Optional** CMake + 系统 Verilator（无 Conan；全 wrap 矩阵 sim / sim-fail） | `cmake -S cmake-system -B build-system && cmake --build build-system --target sim` |
 | `cmake-conan/` | **Optional** CMake + Conan 2 本地 Verilator recipe（withlimon / 系统 kit） | 见 [`cmake-conan/README.md`](cmake-conan/README.md) |
+| `cmake-cocotb/` | **Optional** third CMake tree: `cocotb-wrap/` only (invokes existing Makefiles; not RtlLabSim) | `cmake -S cmake-cocotb -B build-cocotb && cmake --build build-cocotb --target sim` |
 
 依赖：`iverilog`（P1–P11）、`make`、`python3`（P3/P7/P8/P11）。P5/P9 另需 `sv2v`、`python3-venv`、`cocotb<2`、`libpython`。**P12** 另需 `yosys`、`sby`（SymbiYosys）、`z3`（见 `p12-fifo-formal/README.md`）。
 
@@ -122,20 +123,32 @@ Chakraborty *VLSI Signal Processing*（L1–L39）→ 转置 FIR、IIR 重定时
 
 Separate trees — they do **not** change `cd <lab> && make` / `nptel-vlsi-sp` / `woods-fpga-sp` `make all`.
 
-- [`verilator-wrap/`](verilator-wrap/) — C++ TBs for all 10 NPTEL RTL labs, 6 Woods labs, plus P3/P7/P11. PASS: `cd verilator-wrap && make all`. Evidence: [`verilator-wrap/PASS_EVIDENCE.md`](verilator-wrap/PASS_EVIDENCE.md).
-- [`cocotb-wrap/`](cocotb-wrap/) — extra randomized Python goldens (LMS, DLMS, CORDIC, DA FIR, P3 FIR). PASS: `cd cocotb-wrap && make venv && make all`.
+- [`verilator-wrap/`](verilator-wrap/) — C++ TBs for all 10 NPTEL RTL labs, all 17 Woods RTL labs, plus P3/P7/P11. PASS: `cd verilator-wrap && make all`. Evidence: [`verilator-wrap/PASS_EVIDENCE.md`](verilator-wrap/PASS_EVIDENCE.md).
+- [`cocotb-wrap/`](cocotb-wrap/) — extra randomized Python goldens (LMS, DLMS, CORDIC, DA FIR, P3 FIR). PASS: `cd cocotb-wrap && make venv && make all`. CMake: [`cmake-cocotb/`](cmake-cocotb/) (separate project; not `cmake-system`).
 
 Windows (PC2023) uses the [withlimon/verilator-windows](https://github.com/withlimon/verilator-windows) build/layout (not a random unofficial drop) and **`verilator_bin.exe`** — not the extensionless Perl `verilator` (Explorer/CMD “Open with…”). See [`verilator-wrap/WINDOWS.md`](verilator-wrap/WINDOWS.md). Linux/mac: ordinary `verilator`.
 
-## Optional CMake dual-tree（Make 路径不动）
+## Optional CMake trees（Make 路径不动）
 
-与 [protosim-apb](https://github.com/weiwan-gmail/protosim-apb) 相同的 `cmake-system/` + `cmake-conan/` 布局；共用 [`cmake/RtlLabSim.cmake`](cmake/RtlLabSim.cmake) / [`cmake/PreferUnixGcc.cmake`](cmake/PreferUnixGcc.cmake) / [`cmake/labs.cmake`](cmake/labs.cmake)。编的是 **全部 19 个 verilator-wrap lab**（加 `sim-fail`），DUT 仍走原 lab 相对路径。添加 lab = `labs.cmake` 一行，两个 `CMakeLists.txt` 保持薄封装。`sim-fail` 为 inject-and-catch（故意写错 CSD golden，runner 只有抓到 `FAIL` 才算过）。**cocotb 仍仅 Make。** Woods 未 wrap 的 lab 仍仅 iverilog，见 [`verilator-wrap/SCOPE.md`](verilator-wrap/SCOPE.md)。
+三棵独立 CMake 工程（不是把 cocotb 塞进 Verilator dual-tree）：
+
+| Tree | 内容 | 共用 |
+|------|------|------|
+| [`cmake-system/`](cmake-system/) | 系统 Verilator，**全部 verilator-wrap C++ lab** + `sim-fail` | [`cmake/RtlLabSim.cmake`](cmake/RtlLabSim.cmake) / [`cmake/labs.cmake`](cmake/labs.cmake) |
+| [`cmake-conan/`](cmake-conan/) | 同上，Conan 2 本地 Verilator recipe | 同上（**不含** cocotb） |
+| [`cmake-cocotb/`](cmake-cocotb/) | **只**跑 `cocotb-wrap/`（调用现有 Makefile） | [`cmake/CocotbWrap.cmake`](cmake/CocotbWrap.cmake) / [`cmake/cocotb_labs.cmake`](cmake/cocotb_labs.cmake) |
+
+添加 Verilator lab = `labs.cmake` 一行 `rtl_lab_define()`；添加 cocotb lab = `cocotb_labs.cmake` 一行。`cmake-system` / `cmake-conan` 的 `CMakeLists.txt` 保持薄封装，**不** `include` cocotb。`sim-fail` 为 inject-and-catch（故意写错 CSD golden）。Woods PLACEHOLDER 仍不 wrap，见 [`verilator-wrap/SCOPE.md`](verilator-wrap/SCOPE.md)。无 cocotb venv 时 `cmake-cocotb` configure 成功、ctest **SKIP**（见该目录 README）。
 
 ```bash
 # 系统 Verilator（Linux VM 已证明）
 cmake -S cmake-system -B build-system -DCMAKE_BUILD_TYPE=Release
 cmake --build build-system --target sim
 cmake --build build-system --target sim-fail
+
+# cocotb（需先 make -C cocotb-wrap venv）
+cmake -S cmake-cocotb -B build-cocotb
+cmake --build build-cocotb --target sim
 ```
 
 Windows PC2023（worker `D:\CursorWorker`，Conan 2.34 + withlimon `verilator_bin.exe`）：[`cmake-system/WINDOWS.md`](cmake-system/WINDOWS.md) 与 `cmake-system/build_sim.ps1` / `cmake-conan/build_sim.ps1`。

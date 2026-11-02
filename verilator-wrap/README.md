@@ -33,16 +33,11 @@ Use the [withlimon/verilator-windows](https://github.com/withlimon/verilator-win
 | Wrap | Original lab | Why this one |
 |------|----------------|--------------|
 | `nptel-lab-*` (10) | all RTL labs under `nptel-vlsi-sp/lab-*` | full NPTEL RTL set (not `assign-w*`) |
-| `woods-lab-retiming-fir` | Woods retiming FIR | FIR / retiming |
-| `woods-lab-lms` | Woods 2-tap LMS | adaptive |
-| `woods-lab-da-fir` | Woods unsigned DA FIR | distributed arithmetic |
-| `woods-lab-arith` | CLA-16 + array mult | arithmetic |
-| `woods-lab-cordic` | rotate + vector | CORDIC |
-| `woods-lab-fft8` | 8-pt FFT | transform |
+| `woods-lab-*` (17) | every `woods-fpga-sp/lab-*` RTL tree | FIR/retiming, LMS, DA, arith, CORDIC, FFT, IIR, biquad, signed DA, RCM, RLS, divider, RNS, sqrt, LNS, Givens, SGR |
 | `p3-fir-nco` | P3 | FIR + NCO (quick) |
 | `p7-cic` | P7 | CIC (quick) |
 | `p11-sdr-loop` | P11 | NCO→FIR→CIC (quick) |
 
-Woods labs **not** wrapped, and why: [`SCOPE.md`](SCOPE.md).
+Woods **PLACEHOLDER** dirs (not `lab-*`) stay unwrapped: [`SCOPE.md`](SCOPE.md).
 
-Cocotb (randomized Python goldens) lives in a **separate** tree: [`../cocotb-wrap/`](../cocotb-wrap/).
+Cocotb (randomized Python goldens) lives in a **separate** tree: [`../cocotb-wrap/`](../cocotb-wrap/) (Make) plus optional [`../cmake-cocotb/`](../cmake-cocotb/) (invokes those Makefiles). Not part of `cmake-system` / `labs.cmake`.

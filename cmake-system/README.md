@@ -2,11 +2,11 @@
 
 与 [protosim-apb](https://github.com/weiwan-gmail/protosim-apb) 相同的双树之一：这里只用**本机已安装的 Verilator**，不跑 Conan。
 
-Does **not** change iverilog labs, `verilator-wrap/` Make, or `cocotb-wrap/` (cocotb stays Make-only).
+Does **not** change iverilog labs or `verilator-wrap/` Make. **Does not include cocotb** — that is a third tree: [`../cmake-cocotb/`](../cmake-cocotb/).
 
 ## Matrix
 
-CMake 编 **全部 19 个** `verilator-wrap/` lab（相对路径引用原 DUT，不复制 RTL）。添加一个 lab = [`../cmake/labs.cmake`](../cmake/labs.cmake) 里一行 `rtl_lab_define()`；`CMakeLists.txt` 保持薄封装。
+CMake 编 **全部 30 个** `verilator-wrap/` lab（相对路径引用原 DUT，不复制 RTL）。添加一个 lab = [`../cmake/labs.cmake`](../cmake/labs.cmake) 里一行 `rtl_lab_define()`；`CMakeLists.txt` 保持薄封装。
 
 | Target | Wrap | Track |
 |--------|------|--------|
@@ -26,13 +26,24 @@ CMake 编 **全部 19 个** `verilator-wrap/` lab（相对路径引用原 DUT，
 | `sim_woods_arith` | `woods-lab-arith` | Woods |
 | `sim_cordic` | `woods-lab-cordic` | Woods |
 | `sim_fft8` | `woods-lab-fft8` | Woods |
+| `sim_iir1` | `woods-lab-iir1` | Woods |
+| `sim_biquad` | `woods-lab-biquad` | Woods |
+| `sim_da_fir_signed` | `woods-lab-da-fir-signed` | Woods |
+| `sim_rcm` | `woods-lab-rcm` | Woods |
+| `sim_rls1` | `woods-lab-rls1` | Woods |
+| `sim_div_nr` | `woods-lab-div-nr` | Woods |
+| `sim_rns35` | `woods-lab-rns35` | Woods |
+| `sim_sqrt16` | `woods-lab-sqrt16` | Woods |
+| `sim_lns_mul` | `woods-lab-lns-mul` | Woods |
+| `sim_givens2` | `woods-lab-givens2` | Woods |
+| `sim_sgr2` | `woods-lab-sgr2` | Woods |
 | `sim_p3_fir_nco` | `p3-fir-nco` | P3 |
 | `sim_p7_cic` | `p7-cic` | P7 |
 | `sim_p11_sdr_loop` | `p11-sdr-loop` | P11 |
-| `sim` | 依次跑上面 19 个，全部 PASS | |
+| `sim` | 依次跑上面 30 个，全部 PASS | |
 | `sim-fail` | 同一 CSD DUT，**故意写错 golden**；`ExpectFail.cmake` 仅在捕获 `FAIL` 时成功 | inject-and-catch |
 
-Skip: Woods labs that were **never wrapped** stay iverilog-only — [`../verilator-wrap/SCOPE.md`](../verilator-wrap/SCOPE.md). cocotb stays Make-only.
+Skip: Woods **PLACEHOLDER** dirs stay unwrapped — [`../verilator-wrap/SCOPE.md`](../verilator-wrap/SCOPE.md). cocotb is [`../cmake-cocotb/`](../cmake-cocotb/), not this tree.
 
 Shared helpers: [`../cmake/RtlLabSim.cmake`](../cmake/RtlLabSim.cmake), [`../cmake/PreferUnixGcc.cmake`](../cmake/PreferUnixGcc.cmake), [`../cmake/labs.cmake`](../cmake/labs.cmake).
 
