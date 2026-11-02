@@ -18,3 +18,5 @@ fifo_formal_bmc/
 fifo_formal_cover/
 **/fifo_formal_bmc/
 **/fifo_formal_cover/
+*.pdf
+refs/*.pdf

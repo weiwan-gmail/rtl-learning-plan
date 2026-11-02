@@ -1,7 +1,7 @@
 # RTL 学习路线图（Verilator / iverilog 仿真友好）
 **学习者：** Wei（中文）  
 **已有阶梯：** tinyriscv → picorv32 → FemtoRV/`learn-fpga` → darkriscv → SERV  
-**执行状态（2026-11-02 Asia/Shanghai）：** P1–P12 **DONE**（本地仿真/formal 绿 + 已 push）；**N5→P6**、**N6→P7**、**I6→P8** 三角光栅、**I7→P9** tiny-gpu matmul、**I5×I6→P10** VGA+三角 FB、**Track B A3-lite→P11** SDR 环回、**A5→P12** SymbiYosys FIFO formal；**N7** = 免费 NPTEL 选讲清单 **DONE**（`n7-nptel-mapping-sp/`）；RISC-V 阶梯 **DONE**。  
+**执行状态（2026-11-02 Asia/Shanghai）：** P1–P12 **DONE**（本地仿真/formal 绿 + 已 push）；**N5→P6**、**N6→P7**、**I6→P8** 三角光栅、**I7→P9** tiny-gpu matmul、**I5×I6→P10** VGA+三角 FB、**Track B A3-lite→P11** SDR 环回、**A5→P12** SymbiYosys FIFO formal；**N7** = 免费 NPTEL 选讲清单 **DONE**（`n7-nptel-mapping-sp/`）；**R2/Woods Batch 1** **DONE**（`woods-fpga-sp/`）；RISC-V 阶梯 **DONE**。  
 **产出性质：** PLAN + 已落地练习树（`p1`–`p12`）+ N7 选讲文档；后续 unpaid 工作仍按 PLAN 节奏推进，不强制一次开多个大核。  
 **研究日 / 修订：** 2026-11-02（Asia/Shanghai）— P12 A5 SymbiYosys FIFO formal + P11 SDR 环回（NCO→FIR→CIC）+ P10 VGA+三角 FB + P9/I7 matmul + P8/I6 三角光栅 + P7/N6 CIC + N7 NPTEL 选讲清单落地；R1/R2 仍可选付费、本路径不买  
 **仿真工具偏好：** Verilator（大设计 / C++ cosim）+ iverilog（小 DUT / 快速自检）+ GTKWave
@@ -403,8 +403,8 @@ Track C:            I5 ==== I6 == I7 ========= A4 ===
 | **R3** | NPTEL *Mapping Signal Processing Algorithms to Architectures*（Nitin Chandrachoodan, IITM） | 免费课档案 | https://nptel.ac.in/courses/108106149 · archive · [YouTube playlist](https://www.youtube.com/playlist?list=PLyqSpQzTE6M8XDxxMl4SNFiB6_U4kII8Z) · **选讲清单 → [`n7-nptel-mapping-sp/`](n7-nptel-mapping-sp/)** |
 | **R4** | （降优先级）印度 PG cert / 再读一个 MTech | **Wei 跳过** | 帖内共识：更吃 **项目 + 应用深度**，不必再堆证书路径 |
 
-**怎么用：** N6→**P7 CIC**；**N7→R3 选讲清单已落地**（必看/选看/可跳，见 `n7-nptel-mapping-sp/`）。**不买** MathWorks/Woods 亦可推进；有预算再开 **R1**，馆藏/正版再翻 **R2**。PWM 已用 **N5→P6** 补。
+**怎么用：** N6→**P7 CIC**；**N7→R3 选讲清单已落地**（必看/选看/可跳，见 `n7-nptel-mapping-sp/`）。**R2/Woods** 已开 RTL 仿真 Batch 1 → [`woods-fpga-sp/`](woods-fpga-sp/)（复用 P3/P7/P11/P12；Vivado/HLS PLACEHOLDER）。有预算再开 **R1**。PWM 已用 **N5→P6** 补。
 
 ---
 
-*文档修订 — 2026-11-02 Asia/Shanghai — P1–P12（含 A5 SymbiYosys FIFO formal + I6 三角光栅 + I7 matmul + P10 VGA×三角 + P11 SDR）+ N7 NPTEL 选讲 DONE；R1/R2 仍可选；§7 r/FPGA 补强*
+*文档修订 — 2026-11-02 Asia/Shanghai — P1–P12 + N7 NPTEL + **R2/Woods Batch 1** `woods-fpga-sp/`（5 RTL labs + PLACEHOLDERs）DONE；R1 仍可选；§7 r/FPGA 补强*

@@ -1,0 +1,9 @@
+iverilog -g2005 -Wall -Wno-timescale -o sim_iir1 tb_iir1.v iir1.v
+vvp sim_iir1
+PASS iir1 n_checked=58 mismatches=0
+METRIC RMSE=0 SNR_dB=999
+tb_iir1.v:93: $finish called at 655000 (1ps)
+python3 check_iir1.py
+first ys [0, 500, 1250, 1625, 1062, 281]
+PASS check_iir1.py
+ALL PASS

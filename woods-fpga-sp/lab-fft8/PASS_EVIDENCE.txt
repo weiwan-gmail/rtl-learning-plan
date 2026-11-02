@@ -1,0 +1,11 @@
+iverilog -g2005 -Wall -Wno-timescale -o sim_fft8 tb_fft8.v fft8.v
+vvp sim_fft8
+PASS fft8 vectors=4 mismatches=0
+METRIC RMSE=0 SNR_dB=999
+tb_fft8.v:133: $finish called at 1205000 (1ps)
+python3 check_fft8.py
+DC [997, 0, 0, 0, 0, 0, 0, 0] [0, 0, 0, 0, 0, 0, 0, 0]
+impulse [1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000] [0, 0, 0, 0, 0, 0, 0, 0]
+tone1 [(-1, 0), (1999, -1), (0, 0), (0, 0), (0, 0), (1, 0), (0, 0), (2000, 0)]
+PASS check_fft8.py
+ALL PASS

@@ -2,7 +2,7 @@
 
 Wei 的 Verilator / iverilog 动手练习树。路线说明见 [`RTL_Learning_Roadmap_Wei.md`](RTL_Learning_Roadmap_Wei.md)。
 
-- **进度：** P1–P12 已完成（本地绿 + 已 push）；**N5 PWM → P6**、**N6 CIC → P7**、**Track C I6 → P8** 三角形光栅、**I7 → P9** tiny-gpu **matmul**、**I5×I6 → P10** VGA+三角 FB、**Track B A3-lite → P11** SDR 环回（NCO→FIR→CIC）、**A5 → P12** SymbiYosys FIFO formal 已落地。RISC-V 阶梯已完成；**N7** = 免费 NPTEL 选讲清单（DONE）→ [`n7-nptel-mapping-sp/`](n7-nptel-mapping-sp/)。其余练习队列与中高级补强见路线图「接着要做的练习队列」与 **§7**。
+- **进度：** P1–P12 已完成（本地绿 + 已 push）；**N5 PWM → P6**、**N6 CIC → P7**、**Track C I6 → P8** 三角形光栅、**I7 → P9** tiny-gpu **matmul**、**I5×I6 → P10** VGA+三角 FB、**Track B A3-lite → P11** SDR 环回（NCO→FIR→CIC）、**A5 → P12** SymbiYosys FIFO formal 已落地。RISC-V 阶梯已完成；**N7** = 免费 NPTEL 选讲清单（DONE）→ [`n7-nptel-mapping-sp/`](n7-nptel-mapping-sp/)。**R2/Woods** 书 → RTL 仿真 Batch 1（DONE）→ [`woods-fpga-sp/`](woods-fpga-sp/)（CORDIC/IIR/DA-FIR/FFT8/LMS；Vivado/HLS 为 PLACEHOLDER）。其余练习队列与中高级补强见路线图「接着要做的练习队列」与 **§7**。
 
 ## 阶梯
 
@@ -20,6 +20,7 @@ Wei 的 Verilator / iverilog 动手练习树。路线说明见 [`RTL_Learning_Ro
 | `p10-vga-tri/` | P4 VGA 时序 + P8 三角 FB（NN×10） | `cd p10-vga-tri && make all` |
 | `p11-sdr-loop/` | Track B：NCO→FIR→CIC 教学环回 | `cd p11-sdr-loop && make all` |
 | `p12-fifo-formal/` | A5：SymbiYosys formal（复用 P2 FIFO） | `cd p12-fifo-formal && make all` |
+| `woods-fpga-sp/` | Woods FPGA SP 书 → RTL labs（Batch 1） | `cd woods-fpga-sp && make all` |
 
 依赖：`iverilog`（P1–P11）、`make`、`python3`（P3/P7/P8/P11）。P5/P9 另需 `sv2v`、`python3-venv`、`cocotb<2`、`libpython`。**P12** 另需 `yosys`、`sby`（SymbiYosys）、`z3`（见 `p12-fifo-formal/README.md`）。
 
@@ -94,6 +95,15 @@ cd rtl-learning-plan/p12-fifo-formal && make all
 ```
 
 复用 `p2-sync-fifo/sync_fifo.v`；SymbiYosys BMC+cover（`smtbmc z3`）证明 empty/full 互斥、count 一致、assume 下无溢出/下溢。依赖与安装见 `p12-fifo-formal/README.md`。通过证据见 `p12-fifo-formal/PASS_EVIDENCE.txt`。
+
+
+## Woods / R2 快速开始
+
+```bash
+cd rtl-learning-plan/woods-fpga-sp && make all
+```
+
+章映射 / 占位符 / 后续批次：[`woods-fpga-sp/CHAPTER_MAP.md`](woods-fpga-sp/CHAPTER_MAP.md)、[`PLACEHOLDERS.md`](woods-fpga-sp/PLACEHOLDERS.md)、[`NEXT.md`](woods-fpga-sp/NEXT.md)。PDF 仅本地 `refs/`（gitignore），课程镜像 URL 见该目录 README。
 
 ## 许可
 

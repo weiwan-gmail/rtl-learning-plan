@@ -1,0 +1,10 @@
+iverilog -g2005 -Wall -Wno-timescale -o sim_lms2 tb_lms2.v lms2.v
+vvp sim_lms2
+INFO final w0=2 w1=1 (plant 2, 1)
+PASS lms2 n_checked=256 mismatches=0
+METRIC RMSE=0 SNR_dB=999
+tb_lms2.v:100: $finish called at 2635000 (1ps)
+python3 check_lms2.py
+final w0=2 w1=1
+PASS check_lms2.py
+ALL PASS

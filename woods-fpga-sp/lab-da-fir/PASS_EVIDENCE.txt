@@ -1,0 +1,8 @@
+iverilog -g2005 -Wall -Wno-timescale -o sim_da tb_da_fir4.v da_fir4.v
+vvp sim_da
+PASS da_fir4 n_checked=27 mismatches=0
+METRIC RMSE=0 SNR_dB=999
+tb_da_fir4.v:86: $finish called at 3015000 (1ps)
+python3 check_da_fir4.py
+PASS check_da_fir4.py
+ALL PASS
