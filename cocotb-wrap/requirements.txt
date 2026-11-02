@@ -1,0 +1,2 @@
+# Optional cocotb wraps. Pin <2 to match P5/P9 and Verilator 5.x on this tree.
+cocotb>=1.8,<2
