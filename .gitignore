@@ -1,5 +1,8 @@
 **/.venv/
 **/build/
+**/obj_dir/
+**/sim_build/
+*.fst
 *.vcd
 *.vvp
 sim_*

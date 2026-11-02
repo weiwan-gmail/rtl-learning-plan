@@ -22,6 +22,8 @@ Wei 的 Verilator / iverilog 动手练习树。路线说明见 [`RTL_Learning_Ro
 | `p12-fifo-formal/` | A5：SymbiYosys formal（复用 P2 FIFO） | `cd p12-fifo-formal && make all` |
 | `woods-fpga-sp/` | Woods FPGA SP 书 → RTL labs（Batch 1–4，17 labs，课轨完成） | `cd woods-fpga-sp && make all` |
 | `nptel-vlsi-sp/` | NPTEL 108105157 VLSI SP（Chakraborty）→ 10 RTL labs + Week1–8 作业检查器 | `cd nptel-vlsi-sp && make all` |
+| `verilator-wrap/` | **Optional** Verilator C++ TBs (separate trees; original `make` unchanged) | `cd verilator-wrap && make all` |
+| `cocotb-wrap/` | **Optional** cocotb+Verilator (LMS/CORDIC/DA/FIR random goldens only) | `cd cocotb-wrap && make venv && make all` |
 
 依赖：`iverilog`（P1–P11）、`make`、`python3`（P3/P7/P8/P11）。P5/P9 另需 `sv2v`、`python3-venv`、`cocotb<2`、`libpython`。**P12** 另需 `yosys`、`sby`（SymbiYosys）、`z3`（见 `p12-fifo-formal/README.md`）。
 
@@ -113,6 +115,15 @@ cd rtl-learning-plan/nptel-vlsi-sp && make all
 ```
 
 Chakraborty *VLSI Signal Processing*（L1–L39）→ 转置 FIR、IIR 重定时、DLMS、2/3-parallel FIR、折叠 biquad、比特串行 FIR、Baugh–Wooley、CSD、look-ahead IIR，外加 Week1–8 作业的 DFG/寿命检查器。映射见 [`nptel-vlsi-sp/CHAPTER_MAP.md`](nptel-vlsi-sp/CHAPTER_MAP.md)。未跑 Vivado。
+
+## Optional Verilator / cocotb wraps
+
+Separate trees — they do **not** change `cd <lab> && make` / `nptel-vlsi-sp` / `woods-fpga-sp` `make all`.
+
+- [`verilator-wrap/`](verilator-wrap/) — C++ TBs for all 10 NPTEL RTL labs, 6 Woods labs, plus P3/P7/P11. PASS: `cd verilator-wrap && make all`. Evidence: [`verilator-wrap/PASS_EVIDENCE.md`](verilator-wrap/PASS_EVIDENCE.md).
+- [`cocotb-wrap/`](cocotb-wrap/) — extra randomized Python goldens (LMS, DLMS, CORDIC, DA FIR, P3 FIR). PASS: `cd cocotb-wrap && make venv && make all`.
+
+Windows (PC2023) uses the [withlimon/verilator-windows](https://github.com/withlimon/verilator-windows) build/layout (not a random unofficial drop) and **`verilator_bin.exe`** — not the extensionless Perl `verilator` (Explorer/CMD “Open with…”). See [`verilator-wrap/WINDOWS.md`](verilator-wrap/WINDOWS.md). Linux/mac: ordinary `verilator`.
 
 ## 许可
 
