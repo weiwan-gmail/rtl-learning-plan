@@ -2,6 +2,8 @@
 
 Recorded **2026-11-02** on worker **PC2023**, checkout `D:\CursorWorker\rtl-learning-plan`, branch `cursor/cmake-dual-tree-c4c8`.
 
+This run is the original **5-lab** representative matrix (`sim_csd_mul`, `sim_da_fir4`, `sim_woods_arith`, `sim_p3_fir_nco`, `sim_p7_cic`, `sim-fail`). The expanded 19-lab wrap matrix is Linux-proven; a PC2023 re-run of `build_sim.ps1` is a follow-up (same PE / MSVC rules in [`WINDOWS.md`](WINDOWS.md)).
+
 | Item | Value |
 |------|--------|
 | Host | PC2023 |

@@ -6,6 +6,7 @@
 #   extensionless Perl `verilator` (Explorer/CMD Open-with trap).
 # - include(CheckCXXCompilerFlag) before verilate().
 # - On MSVC, strip GCC-only -fcoroutines* flags Verilator may inject.
+# - Lab matrix is cmake/labs.cmake (one rtl_lab_define() row per wrap).
 
 include_guard(GLOBAL)
 
@@ -205,8 +206,77 @@ function(rtl_lab_strip_msvc_gcc_flags target)
   endforeach()
 endfunction()
 
+# Register one wrap (or the fail harness). Adding a lab is one call in
+# cmake/labs.cmake — not a copy of rtl_lab_add_sim + COMMAND + ctest.
+#
+# WRAP  verilator-wrap/<WRAP>/  — TB defaults to that dir's tb.cpp;
+#       wrap.v is prepended to SOURCES when present.
+# SOURCES  repo-relative DUT / extra Verilog (no wholesale RTL copies).
+# FAIL  inject-and-catch target (exactly one); omitted from `sim` / PASS ctest.
+function(rtl_lab_define)
+  cmake_parse_arguments(D "FAIL" "NAME;TOP;WRAP;TB;PREFIX" "SOURCES;VERILATOR_ARGS" ${ARGN})
+  if(NOT D_NAME OR NOT D_TOP)
+    message(FATAL_ERROR "rtl_lab_define requires NAME and TOP")
+  endif()
+  if(NOT D_PREFIX)
+    set(D_PREFIX V${D_TOP})
+  endif()
+
+  set(_srcs "")
+  if(D_WRAP)
+    set(_wrap_dir "${RTL_LAB_REPO_ROOT}/verilator-wrap/${D_WRAP}")
+    if(NOT IS_DIRECTORY "${_wrap_dir}")
+      message(FATAL_ERROR "rtl_lab_define(${D_NAME}): wrap dir not found: ${_wrap_dir}")
+    endif()
+    if(EXISTS "${_wrap_dir}/wrap.v")
+      list(APPEND _srcs "${_wrap_dir}/wrap.v")
+    endif()
+    if(NOT D_TB)
+      set(D_TB "${_wrap_dir}/tb.cpp")
+    endif()
+  endif()
+  if(NOT D_TB)
+    message(FATAL_ERROR "rtl_lab_define(${D_NAME}): need WRAP or TB")
+  endif()
+  if(NOT IS_ABSOLUTE "${D_TB}")
+    set(D_TB "${RTL_LAB_REPO_ROOT}/${D_TB}")
+  endif()
+  if(NOT EXISTS "${D_TB}")
+    message(FATAL_ERROR "rtl_lab_define(${D_NAME}): TB not found: ${D_TB}")
+  endif()
+
+  foreach(_s IN LISTS D_SOURCES)
+    if(NOT IS_ABSOLUTE "${_s}")
+      set(_s "${RTL_LAB_REPO_ROOT}/${_s}")
+    endif()
+    if(NOT EXISTS "${_s}")
+      message(FATAL_ERROR "rtl_lab_define(${D_NAME}): source not found: ${_s}")
+    endif()
+    list(APPEND _srcs "${_s}")
+  endforeach()
+  if(NOT _srcs)
+    message(FATAL_ERROR "rtl_lab_define(${D_NAME}): no SOURCES")
+  endif()
+
+  if(D_FAIL)
+    get_property(_have_fail GLOBAL PROPERTY RTL_LAB_FAIL_NAME)
+    if(_have_fail)
+      message(FATAL_ERROR
+        "rtl_lab_define: only one FAIL lab (already ${_have_fail})")
+    endif()
+    set_property(GLOBAL PROPERTY RTL_LAB_FAIL_NAME "${D_NAME}")
+  else()
+    set_property(GLOBAL APPEND PROPERTY RTL_LAB_PASS_NAMES "${D_NAME}")
+  endif()
+  set_property(GLOBAL PROPERTY RTL_LAB_${D_NAME}_TOP "${D_TOP}")
+  set_property(GLOBAL PROPERTY RTL_LAB_${D_NAME}_PREFIX "${D_PREFIX}")
+  set_property(GLOBAL PROPERTY RTL_LAB_${D_NAME}_TB "${D_TB}")
+  set_property(GLOBAL PROPERTY RTL_LAB_${D_NAME}_SOURCES "${_srcs}")
+  set_property(GLOBAL PROPERTY RTL_LAB_${D_NAME}_VERILATOR_ARGS "${D_VERILATOR_ARGS}")
+endfunction()
+
 function(rtl_lab_add_sim name)
-  cmake_parse_arguments(ARG "" "TOP;PREFIX" "SOURCES;TB" ${ARGN})
+  cmake_parse_arguments(ARG "" "TOP;PREFIX" "SOURCES;TB;VERILATOR_ARGS" ${ARGN})
   if(NOT ARG_PREFIX)
     set(ARG_PREFIX V${ARG_TOP})
   endif()
@@ -225,8 +295,23 @@ function(rtl_lab_add_sim name)
     SOURCES ${ARG_SOURCES}
     VERILATOR_ARGS
       -Wall --Wno-fatal -Wno-DECLFILENAME --timescale 1ns/1ps
+      ${ARG_VERILATOR_ARGS}
   )
   rtl_lab_strip_msvc_gcc_flags(${name})
+endfunction()
+
+function(rtl_lab_emit_from_props name)
+  get_property(_top GLOBAL PROPERTY RTL_LAB_${name}_TOP)
+  get_property(_prefix GLOBAL PROPERTY RTL_LAB_${name}_PREFIX)
+  get_property(_tb GLOBAL PROPERTY RTL_LAB_${name}_TB)
+  get_property(_srcs GLOBAL PROPERTY RTL_LAB_${name}_SOURCES)
+  get_property(_vargs GLOBAL PROPERTY RTL_LAB_${name}_VERILATOR_ARGS)
+  rtl_lab_add_sim(${name}
+    TOP ${_top}
+    PREFIX ${_prefix}
+    TB ${_tb}
+    SOURCES ${_srcs}
+    VERILATOR_ARGS ${_vargs})
 endfunction()
 
 function(rtl_lab_sim_setup)
@@ -239,73 +324,50 @@ function(rtl_lab_sim_setup)
   rtl_lab_find_verilator()
   include(CheckCXXCompilerFlag)
 
-  set(_R "${RTL_LAB_REPO_ROOT}")
-  set(_W "${_R}/verilator-wrap")
+  # Data table: one rtl_lab_define() per wrap. Builds PASS targets, `sim`,
+  # `sim-fail`, and ctest from that list (no per-lab COMMAND copy-paste).
+  include("${RTL_LAB_CMAKE_DIR}/labs.cmake")
 
-  # Representative matrix (not every wrap): ≥1 NPTEL, ≥1 Woods, P3 and P7.
-  # DUT paths are the original labs / existing wraps — no wholesale RTL copies.
+  get_property(_pass_tgts GLOBAL PROPERTY RTL_LAB_PASS_NAMES)
+  get_property(_fail_tgt GLOBAL PROPERTY RTL_LAB_FAIL_NAME)
+  if(NOT _pass_tgts)
+    message(FATAL_ERROR "RtlLabSim: cmake/labs.cmake defined no PASS labs")
+  endif()
+  if(NOT _fail_tgt)
+    message(FATAL_ERROR "RtlLabSim: cmake/labs.cmake must define one FAIL lab")
+  endif()
 
-  rtl_lab_add_sim(sim_csd_mul
-    TOP csd_mul PREFIX Vcsd_mul
-    TB ${_W}/nptel-lab-csd-mul/tb.cpp
-    SOURCES ${_R}/nptel-vlsi-sp/lab-csd-mul/csd_mul.v)
+  list(LENGTH _pass_tgts _npass)
+  message(STATUS "RtlLabSim: ${_npass} PASS labs from cmake/labs.cmake + ${_fail_tgt}")
 
-  rtl_lab_add_sim(sim_da_fir4
-    TOP da_fir4 PREFIX Vda_fir4
-    TB ${_W}/woods-lab-da-fir/tb.cpp
-    SOURCES ${_R}/woods-fpga-sp/lab-da-fir/da_fir4.v)
+  foreach(_name IN LISTS _pass_tgts)
+    rtl_lab_emit_from_props(${_name})
+  endforeach()
+  rtl_lab_emit_from_props(${_fail_tgt})
 
-  rtl_lab_add_sim(sim_woods_arith
-    TOP wrap_arith PREFIX Vwrap_arith
-    TB ${_W}/woods-lab-arith/tb.cpp
-    SOURCES
-      ${_W}/woods-lab-arith/wrap.v
-      ${_R}/woods-fpga-sp/lab-arith/cla_add16.v
-      ${_R}/woods-fpga-sp/lab-arith/array_mult8.v)
-
-  rtl_lab_add_sim(sim_p3_fir_nco
-    TOP wrap_p3_fir_nco PREFIX Vwrap_p3_fir_nco
-    TB ${_W}/p3-fir-nco/tb.cpp
-    SOURCES
-      ${_W}/p3-fir-nco/wrap.v
-      ${_R}/p3-fir-nco/fir4.v
-      ${_R}/p3-fir-nco/nco.v)
-
-  rtl_lab_add_sim(sim_p7_cic
-    TOP cic_decim PREFIX Vcic_decim
-    TB ${_W}/p7-cic/tb.cpp
-    SOURCES ${_R}/p7-cic/cic_decim.v)
-
-  rtl_lab_add_sim(sim_fail_csd
-    TOP csd_mul PREFIX Vcsd_mul
-    TB ${RTL_LAB_CMAKE_DIR}/fail-harness/tb_intentional_fail.cpp
-    SOURCES ${_R}/nptel-vlsi-sp/lab-csd-mul/csd_mul.v)
-
-  set(_pass_tgts sim_csd_mul sim_da_fir4 sim_woods_arith sim_p3_fir_nco sim_p7_cic)
-
+  set(_sim_run "")
+  foreach(_t IN LISTS _pass_tgts)
+    list(APPEND _sim_run COMMAND "$<TARGET_FILE:${_t}>")
+  endforeach()
   add_custom_target(sim
     DEPENDS ${_pass_tgts}
-    COMMAND $<TARGET_FILE:sim_csd_mul>
-    COMMAND $<TARGET_FILE:sim_da_fir4>
-    COMMAND $<TARGET_FILE:sim_woods_arith>
-    COMMAND $<TARGET_FILE:sim_p3_fir_nco>
-    COMMAND $<TARGET_FILE:sim_p7_cic>
-    COMMENT "Run representative Verilator PASS sims (NPTEL CSD, Woods DA+arith, P3, P7)"
+    ${_sim_run}
+    COMMENT "Run all verilator-wrap PASS sims (${_npass} labs)"
     VERBATIM)
 
   add_custom_target(sim-fail
-    DEPENDS sim_fail_csd
+    DEPENDS ${_fail_tgt}
     COMMAND ${CMAKE_COMMAND}
-            -DEXE=$<TARGET_FILE:sim_fail_csd>
+            -DEXE=$<TARGET_FILE:${_fail_tgt}>
             -P ${RTL_LAB_CMAKE_DIR}/ExpectFail.cmake
     COMMENT "Inject-and-catch: CSD checker must FAIL; runner succeeds only then"
     VERBATIM)
 
-  foreach(_t ${_pass_tgts})
+  foreach(_t IN LISTS _pass_tgts)
     add_test(NAME ${_t} COMMAND ${_t})
   endforeach()
   add_test(NAME sim-fail
     COMMAND ${CMAKE_COMMAND}
-            -DEXE=$<TARGET_FILE:sim_fail_csd>
+            -DEXE=$<TARGET_FILE:${_fail_tgt}>
             -P ${RTL_LAB_CMAKE_DIR}/ExpectFail.cmake)
 endfunction()

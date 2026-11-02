@@ -2,6 +2,8 @@
 
 Recorded **2026-11-02** on worker **PC2023**, checkout `D:\CursorWorker\rtl-learning-plan`, branch `cursor/cmake-dual-tree-c4c8`. Same MSVC + withlimon-layout PE as [`../cmake-system/WINDOWS_PASS_EVIDENCE.md`](../cmake-system/WINDOWS_PASS_EVIDENCE.md).
 
+This run is the original **5-lab** representative matrix. The expanded 19-lab wrap matrix is Linux-proven; a PC2023 re-run of `build_sim.ps1` is a follow-up.
+
 | Item | Value |
 |------|--------|
 | Host | PC2023 |

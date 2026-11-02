@@ -91,4 +91,6 @@ cmake -S cmake-conan -B build-conan -DCMAKE_BUILD_TYPE=Release -DCONAN_HOST_PROF
 - Do not point `VERILATOR=` at the Perl driver.
 - Do not change original lab Makefiles or `verilator-wrap/` / `cocotb-wrap/` (cocotb stays Make-only).
 
-PC2023 proof: [`WINDOWS_PASS_EVIDENCE.md`](WINDOWS_PASS_EVIDENCE.md), [`../cmake-conan/WINDOWS_PASS_EVIDENCE.md`](../cmake-conan/WINDOWS_PASS_EVIDENCE.md).
+PC2023 proof of the **original 5-lab** matrix (CSD, DA FIR, arith, P3, P7 + `sim-fail`): [`WINDOWS_PASS_EVIDENCE.md`](WINDOWS_PASS_EVIDENCE.md), [`../cmake-conan/WINDOWS_PASS_EVIDENCE.md`](../cmake-conan/WINDOWS_PASS_EVIDENCE.md).
+
+The expanded **19-lab** wrap matrix is proven on Linux (`PASS_EVIDENCE.md`). Re-run `build_sim.ps1` on PC2023 to prove the larger set — same withlimon PE / `verilator_bin.exe` / MSVC `-fcoroutines*` rules; Windows re-proof is a follow-up.
