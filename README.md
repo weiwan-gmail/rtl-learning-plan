@@ -1,8 +1,8 @@
-# RTL 学习阶梯（P1–P7）
+# RTL 学习阶梯（P1–P8）
 
 Wei 的 Verilator / iverilog 动手练习树。路线说明见 [`RTL_Learning_Roadmap_Wei.md`](RTL_Learning_Roadmap_Wei.md)。
 
-- **进度：** P1–P7 已完成（本地绿 + 已 push）；**N5 PWM → P6**、**N6 CIC → P7** 已落地。RISC-V 阶梯已完成；**N7** = 免费 NPTEL 选讲清单（DONE）→ [`n7-nptel-mapping-sp/`](n7-nptel-mapping-sp/)。其余练习队列与中高级补强见路线图「接着要做的练习队列」与 **§7**。
+- **进度：** P1–P8 已完成（本地绿 + 已 push）；**N5 PWM → P6**、**N6 CIC → P7**、**Track C I6 → P8** 三角形光栅已落地。RISC-V 阶梯已完成；**N7** = 免费 NPTEL 选讲清单（DONE）→ [`n7-nptel-mapping-sp/`](n7-nptel-mapping-sp/)。其余练习队列与中高级补强见路线图「接着要做的练习队列」与 **§7**。
 
 ## 阶梯
 
@@ -15,8 +15,9 @@ Wei 的 Verilator / iverilog 动手练习树。路线说明见 [`RTL_Learning_Ro
 | `p5-tiny-gpu/` | 上游 [adam-maj/tiny-gpu](https://github.com/adam-maj/tiny-gpu) matadd（子模块） | 见下 |
 | `p6-pwm/` | PWM（counter-compare）自检 | `cd p6-pwm && make all` |
 | `p7-cic/` | CIC 抽取（N=2,R=4,M=1）bit-exact | `cd p7-cic && make all` |
+| `p8-tri-raster/` | 三角形光栅（edge-function，64×48） | `cd p8-tri-raster && make all` |
 
-依赖：`iverilog`（P1–P7）、`make`、`python3`（P3/P7）。P5 另需 `sv2v`、`python3-venv`、`cocotb<2`、`libpython`。
+依赖：`iverilog`（P1–P8）、`make`、`python3`（P3/P7/P8）。P5 另需 `sv2v`、`python3-venv`、`cocotb<2`、`libpython`。
 
 ## P5 快速开始
 
@@ -46,6 +47,15 @@ cd rtl-learning-plan/p7-cic && make all
 
 通过证据见 `p7-cic/PASS_EVIDENCE.txt` / `sim_log.txt`（bit-exact）。
 
+
+## P8 / I6 快速开始
+
+```bash
+cd rtl-learning-plan/p8-tri-raster && make all
+```
+
+通过证据见 `p8-tri-raster/PASS_EVIDENCE.txt`（edge-function，与 Python golden 逐像素一致）。
+
 ## 许可
 
-P1–P4、P6–P7 为练习代码。P5 上游 RTL 属 [adam-maj/tiny-gpu](https://github.com/adam-maj/tiny-gpu)（以该仓库 LICENSE 为准）；本仓库仅保留包装脚本与证据，不 vendoring 上游源码。
+P1–P4、P6–P8 为练习代码。P5 上游 RTL 属 [adam-maj/tiny-gpu](https://github.com/adam-maj/tiny-gpu)（以该仓库 LICENSE 为准）；本仓库仅保留包装脚本与证据，不 vendoring 上游源码。

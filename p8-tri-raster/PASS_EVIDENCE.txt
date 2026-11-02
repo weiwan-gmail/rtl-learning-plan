@@ -1,0 +1,13 @@
+iverilog -g2005 -Wall -Wno-timescale -o sim_tri tb_tri_raster.v tri_raster.v
+vvp sim_tri
+PASS case ccw_on filled=676
+PASS case cw_on filled=676
+PASS case degenerate filled=0
+PASS case clip_partial filled=328
+PASS tri_raster bit-exact W=64 H=48 cases=4
+tb_tri_raster.v:176: $finish called at 264389000 (1ps)
+python3 check_tri.py
+PASS ppm match tri_case1.ppm
+PASS ppm match tri_case4.ppm
+PASS check_tri.py edge-function W=64 H=48 n_ccw=676 n_clip=328
+ALL PASS
