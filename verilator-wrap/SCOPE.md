@@ -17,3 +17,7 @@ Representative Verilator wraps cover FIR/retiming, LMS, DA, arith, CORDIC, and F
 | `lab-sgr2` | Unnormalized Givens; same bucket as givens2 |
 
 PLACEHOLDER dirs (`ch05-vendor-fpga`, `ch07-hls-vivado`, …) stay stubs — no Vivado.
+
+## CMake matrix
+
+`cmake-system/` and `cmake-conan/` verilate **every wrap in this tree** (19 PASS + `sim-fail`). The table is [`../cmake/labs.cmake`](../cmake/labs.cmake). Woods labs in the table above were never wrapped, so they are not in the CMake matrix either.

@@ -4,21 +4,37 @@
 
 Does **not** change iverilog labs, `verilator-wrap/` Make, or `cocotb-wrap/` (cocotb stays Make-only).
 
-## 代表矩阵 / representative matrix
+## Matrix
 
-CMake 只编一组 wrap（相对路径引用原 DUT，不复制 RTL）：
+CMake 编 **全部 19 个** `verilator-wrap/` lab（相对路径引用原 DUT，不复制 RTL）。添加一个 lab = [`../cmake/labs.cmake`](../cmake/labs.cmake) 里一行 `rtl_lab_define()`；`CMakeLists.txt` 保持薄封装。
 
-| Target | Wrap / lab | Track |
-|--------|------------|--------|
-| `sim_csd_mul` | `verilator-wrap/nptel-lab-csd-mul` → `nptel-vlsi-sp/lab-csd-mul` | NPTEL |
-| `sim_da_fir4` | `verilator-wrap/woods-lab-da-fir` | Woods |
-| `sim_woods_arith` | `verilator-wrap/woods-lab-arith` | Woods |
-| `sim_p3_fir_nco` | `verilator-wrap/p3-fir-nco` | P3 |
-| `sim_p7_cic` | `verilator-wrap/p7-cic` | P7 |
-| `sim` | 依次跑上面五个，全部 PASS | |
+| Target | Wrap | Track |
+|--------|------|--------|
+| `sim_fir_transpose` | `nptel-lab-fir-transpose` | NPTEL |
+| `sim_iir_retime` | `nptel-lab-iir-retime` | NPTEL |
+| `sim_dlms` | `nptel-lab-dlms` | NPTEL |
+| `sim_fir_2par` | `nptel-lab-fir-2par` | NPTEL |
+| `sim_fir_3par` | `nptel-lab-fir-3par` | NPTEL |
+| `sim_biquad_fold` | `nptel-lab-biquad-fold` | NPTEL |
+| `sim_bitserial_fir` | `nptel-lab-bitserial-fir` | NPTEL |
+| `sim_baugh_wooley` | `nptel-lab-baugh-wooley` | NPTEL |
+| `sim_csd_mul` | `nptel-lab-csd-mul` | NPTEL |
+| `sim_lookahead_iir` | `nptel-lab-lookahead-iir` | NPTEL |
+| `sim_retiming_fir` | `woods-lab-retiming-fir` | Woods |
+| `sim_lms` | `woods-lab-lms` | Woods |
+| `sim_da_fir4` | `woods-lab-da-fir` | Woods |
+| `sim_woods_arith` | `woods-lab-arith` | Woods |
+| `sim_cordic` | `woods-lab-cordic` | Woods |
+| `sim_fft8` | `woods-lab-fft8` | Woods |
+| `sim_p3_fir_nco` | `p3-fir-nco` | P3 |
+| `sim_p7_cic` | `p7-cic` | P7 |
+| `sim_p11_sdr_loop` | `p11-sdr-loop` | P11 |
+| `sim` | 依次跑上面 19 个，全部 PASS | |
 | `sim-fail` | 同一 CSD DUT，**故意写错 golden**；`ExpectFail.cmake` 仅在捕获 `FAIL` 时成功 | inject-and-catch |
 
-Shared helpers: [`../cmake/RtlLabSim.cmake`](../cmake/RtlLabSim.cmake), [`../cmake/PreferUnixGcc.cmake`](../cmake/PreferUnixGcc.cmake).
+Skip: Woods labs that were **never wrapped** stay iverilog-only — [`../verilator-wrap/SCOPE.md`](../verilator-wrap/SCOPE.md). cocotb stays Make-only.
+
+Shared helpers: [`../cmake/RtlLabSim.cmake`](../cmake/RtlLabSim.cmake), [`../cmake/PreferUnixGcc.cmake`](../cmake/PreferUnixGcc.cmake), [`../cmake/labs.cmake`](../cmake/labs.cmake).
 
 ## Linux
 

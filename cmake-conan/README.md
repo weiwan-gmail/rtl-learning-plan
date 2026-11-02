@@ -16,7 +16,7 @@ Does **not** change iverilog labs, `verilator-wrap/` Make, or `cocotb-wrap/` (co
 | `profiles/windows-msvc` | VS2022 / MSVC 193 (PC2023 CMake path) |
 | `build_sim.ps1` | PC2023 helper |
 
-Targets are the same as cmake-system: `sim` (PASS matrix) and `sim-fail` (inject-and-catch). See [`../cmake-system/README.md`](../cmake-system/README.md).
+Targets are the same as cmake-system: all 19 `verilator-wrap/` PASS labs plus `sim-fail` (inject-and-catch). Table: [`../cmake/labs.cmake`](../cmake/labs.cmake). See [`../cmake-system/README.md`](../cmake-system/README.md).
 
 ## Linux
 
