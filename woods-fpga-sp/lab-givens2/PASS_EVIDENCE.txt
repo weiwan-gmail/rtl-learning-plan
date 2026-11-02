@@ -1,0 +1,11 @@
+make: Entering directory '/workspace/rtl-learning-plan/woods-fpga-sp/lab-givens2'
+iverilog -g2005 -Wall -Wno-timescale -o sim_giv tb_givens2.v givens_apply.v
+vvp sim_giv
+PASS givens_apply n=5 mismatches=0
+METRIC RMSE=0 SNR_dB=999 NULL_DEMO=1
+tb_givens2.v:47: $finish called at 130000 (1ps)
+python3 check_givens2.py
+null 4999 0
+PASS check_givens2.py
+ALL PASS
+make: Leaving directory '/workspace/rtl-learning-plan/woods-fpga-sp/lab-givens2'

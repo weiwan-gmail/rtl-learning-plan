@@ -1,0 +1,11 @@
+make: Entering directory '/workspace/rtl-learning-plan/woods-fpga-sp/lab-retiming-fir'
+iverilog -g2005 -Wall -Wno-timescale -o sim_ret tb_retiming.v fir3_combo.v fir3_pipe.v
+vvp sim_ret
+PASS retiming fir3 combo+pipe n=20 mismatches=0
+METRIC LATENCY_COMBO=1 LATENCY_PIPE=3 SAME_BITEXACT=1
+tb_retiming.v:70: $finish called at 935000 (1ps)
+python3 check_retiming.py
+ys [-6, -17, -20, -16, -12] ...
+PASS check_retiming.py (combo≡pipe golden)
+ALL PASS
+make: Leaving directory '/workspace/rtl-learning-plan/woods-fpga-sp/lab-retiming-fir'

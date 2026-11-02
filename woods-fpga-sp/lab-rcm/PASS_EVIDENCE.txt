@@ -1,0 +1,10 @@
+make: Entering directory '/workspace/rtl-learning-plan/woods-fpga-sp/lab-rcm'
+iverilog -g2005 -Wall -Wno-timescale -o sim_rcm tb_rcm.v rcm_const_mul.v
+vvp sim_rcm
+PASS rcm_const_mul n=36 mismatches=0
+METRIC RMSE=0 SNR_dB=999
+tb_rcm.v:44: $finish called at 750000 (1ps)
+python3 check_rcm.py
+PASS check_rcm.py
+ALL PASS
+make: Leaving directory '/workspace/rtl-learning-plan/woods-fpga-sp/lab-rcm'

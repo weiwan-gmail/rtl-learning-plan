@@ -1,0 +1,10 @@
+make: Entering directory '/workspace/rtl-learning-plan/woods-fpga-sp/lab-da-fir-signed'
+iverilog -g2005 -Wall -Wno-timescale -o sim_da_s tb_da_fir4_signed.v da_fir4_signed.v
+vvp sim_da_s
+PASS da_fir4_signed n=26 mismatches=0
+METRIC RMSE=0 SNR_dB=999
+tb_da_fir4_signed.v:72: $finish called at 2890000 (1ps)
+python3 check_da_fir_signed.py
+PASS check_da_fir_signed.py
+ALL PASS
+make: Leaving directory '/workspace/rtl-learning-plan/woods-fpga-sp/lab-da-fir-signed'

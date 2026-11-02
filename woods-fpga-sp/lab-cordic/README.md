@@ -24,3 +24,8 @@ cd woods-fpga-sp/lab-cordic && make all
 ```
 
 成功末行：`PASS cordic_rotate` / `PASS check_cordic.py` / `ALL PASS`。
+
+## Batch 2：向量模式 `cordic_vector.v`
+
+**vectoring**：把向量旋到 x 轴，`z` 累计角度 ≈ atan2(y,x)，`x` ≈ K·幅度。  
+`di = (y<0)? +1 : -1`（书 §3.4.4）。`make all` 同时跑 rotate + vector。

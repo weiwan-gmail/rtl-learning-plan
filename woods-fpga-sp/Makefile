@@ -1,6 +1,7 @@
 .PHONY: all clean
 
-LABS := lab-cordic lab-iir1 lab-da-fir lab-fft8 lab-lms
+LABS := lab-cordic lab-iir1 lab-da-fir lab-fft8 lab-lms \
+        lab-arith lab-rcm lab-biquad lab-da-fir-signed lab-retiming-fir lab-givens2
 
 all:
 	@for d in $(LABS); do \

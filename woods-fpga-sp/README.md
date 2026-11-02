@@ -18,7 +18,13 @@
 | `lab-*/` | 可 `make all` 的绿灯仿真 |
 | `ch*-*/PLACEHOLDER.md` | 厂商/HLS/大架构 stub |
 
-### 与已有阶梯的复用（不要重复造轮子）
+一键跑全部 lab：
+
+```bash
+cd woods-fpga-sp && make all
+```
+
+### 与已有阶梯的复用
 
 | 书中主题 | 复用 |
 |----------|------|
@@ -29,17 +35,28 @@
 
 ### PLACEHOLDER 约定
 
-目录内仅 `PLACEHOLDER.md`，写明：**不实现的原因**（依赖 Vivado HLS / Altera OpenCL SDK / 厂商专用 IP / 纯工艺综述等）以及若将来要做，应改成什么形态的纯 RTL。
+目录内仅 `PLACEHOLDER.md`，写明：**不实现的原因**以及若将来要做应改成什么形态的纯 RTL。
 
-## Batch 1 已交付 lab（本目录）
+## Batch 1 lab
 
-```bash
-cd lab-cordic && make all   # Ch3 CORDIC rotate
-cd lab-iir1   && make all   # Ch2 一阶 IIR
-cd lab-da-fir && make all   # Ch6 Distributed Arithmetic FIR
-cd lab-fft8   && make all   # Ch2 8-pt radix-2 FFT
-cd lab-lms    && make all   # Ch2 2-tap LMS
-```
+| lab | 主题 |
+|-----|------|
+| `lab-cordic/` | Ch3 CORDIC rotate（+ Batch2 vector） |
+| `lab-iir1/` | Ch2 一阶 IIR |
+| `lab-da-fir/` | Ch6 DA FIR（无符号） |
+| `lab-fft8/` | Ch2 8-pt radix-2 FFT |
+| `lab-lms/` | Ch2 2-tap LMS |
+
+## Batch 2 lab
+
+| lab | 主题 |
+|-----|------|
+| `lab-arith/` | Ch3 CLA-16 + array mult-8 |
+| `lab-rcm/` | Ch6/3 RCM 常系数移位加减 |
+| `lab-biquad/` | Ch2/5 DF-I biquad |
+| `lab-da-fir-signed/` | Ch6 有符号 2's complement DA |
+| `lab-retiming-fir/` | Ch8 combo vs pipelined FIR |
+| `lab-givens2/` | Ch11 2×2 Givens 消零积木 |
 
 依赖：`iverilog`、`vvp`、`python3`（无需 numpy）。
 

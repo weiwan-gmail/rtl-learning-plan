@@ -1,0 +1,11 @@
+make: Entering directory '/workspace/rtl-learning-plan/woods-fpga-sp/lab-biquad'
+iverilog -g2005 -Wall -Wno-timescale -o sim_biquad tb_biquad.v biquad_df1.v
+vvp sim_biquad
+PASS biquad_df1 n=26 mismatches=0
+METRIC RMSE=0 SNR_dB=999
+tb_biquad.v:56: $finish called at 550000 (1ps)
+python3 check_biquad.py
+ys [0, 250, 875, 1875, 1718, 1015]
+PASS check_biquad.py
+ALL PASS
+make: Leaving directory '/workspace/rtl-learning-plan/woods-fpga-sp/lab-biquad'
